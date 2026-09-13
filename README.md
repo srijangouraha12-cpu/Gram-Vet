@@ -1,17 +1,310 @@
-# GramVet TRUST Build — Integrated ML + Case Management
+# 🐄 GramVet — AI-Powered Cattle Disease Surveillance & Prediction
 
-This build bundles the trained bovine ML models directly inside the Flask application. No separate disease-model server is required.
+GramVet is an AI-powered livestock health surveillance platform designed to help farmers and veterinary professionals **identify potential cattle diseases early, assess disease risk, and make informed healthcare decisions**.
 
-## What is included
-- Farmer report flow with live weather inputs, AI-assisted disease screening, triage risk and escalation risk.
-- Permanent animal history: every report, case, treatment, medication note and vaccination remains visible.
-- Automatic open case creation and veterinarian notification when a farmer submits a report.
-- Vet workflow with TEST, MEDICATION, NOTE and CURE actions.
-- A case can only be CLOSED after the assigned veterinarian records a CURE action.
-- Structured vaccination recording tied to the animal, case and veterinarian.
-- Government vaccine inventory: every recorded vaccination deducts stock and creates an audit transaction.
-- Government dashboard with total vaccination events, verified animal coverage, vaccination counts by vaccine and vet, and vaccine-stock usage.
-- Animal history screen showing previous cases, times cured and vaccination history.
+The platform combines **machine learning-based disease prediction**, animal health information, vaccination history, symptoms, herd-level information, and environmental/spatiotemporal factors to provide actionable insights.
+
+---
+
+## 🎯 Problem Statement
+
+Livestock plays a major role in the livelihood of rural communities. However, farmers often face challenges such as:
+
+* 🐄 Difficulty identifying diseases at an early stage
+* 🩺 Limited access to veterinary professionals
+* 💉 Incomplete or irregular vaccination records
+* 🌦️ Environmental factors increasing disease risk
+* 📍 Lack of localized disease surveillance
+* 📊 Limited access to data-driven livestock healthcare
+
+Late identification of diseases can result in reduced milk production, economic losses, and increased disease transmission within herds.
+
+**GramVet aims to bridge this gap through an accessible AI-assisted livestock healthcare platform.**
+
+---
+
+# 💡 Our Solution
+
+GramVet provides a centralized platform where farmers can maintain animal health information and receive AI-assisted disease risk predictions.
+
+The system considers information such as:
+
+* Animal details
+* Symptoms
+* Herd size
+* Vaccination history
+* Water-body proximity
+* Environmental/spatiotemporal information
+* Other relevant health parameters
+
+The collected information is processed by our machine-learning pipeline to generate disease predictions and surveillance insights.
+
+---
+
+# ✨ Key Features
+
+### 🐮 Animal Health Management
+
+* Add and manage livestock records
+* Maintain animal health information
+* Update animal details over time
+* Track vaccination history
+
+### 🩺 Symptom-Based Disease Prediction
+
+* Enter observed symptoms
+* Submit animal health parameters
+* ML-based disease prediction
+* Disease-risk assessment
+
+### 💉 Vaccination Tracking
+
+* Record vaccination dates
+* Automatically calculate vaccination recency
+* Monitor vaccination status
+* Identify potentially overdue vaccinations
+
+### 🌾 Herd & Environmental Information
+
+* Herd-size information
+* Distance from the nearest water body
+* Environmental factors relevant to disease surveillance
+
+### 📍 Spatiotemporal Surveillance
+
+* Incorporates geographical and time-related information
+* Supports disease surveillance at the herd/community level
+* Helps identify patterns that may contribute to disease spread
+
+### 🌐 Farmer-Friendly Interface
+
+* Simple and accessible interface
+* Designed with rural users in mind
+* Marathi language support
+* Responsive web interface
+
+### 🔐 User Management
+
+* User registration and login
+* Persistent storage of livestock information
+* Individual farmer records
+
+---
+
+# 🏗️ System Architecture
+
+```text
+                    ┌──────────────────────┐
+                    │      Farmer/User     │
+                    └──────────┬───────────┘
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │   GramVet Web UI     │
+                    │ HTML / CSS / JS       │
+                    └──────────┬───────────┘
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │      Flask App       │
+                    │      app.py          │
+                    └───────┬───────┬──────┘
+                            │       │
+                ┌───────────┘       └────────────┐
+                ▼                                ▼
+      ┌──────────────────┐             ┌──────────────────┐
+      │   ML Prediction  │             │    Database       │
+      │   ml_package/    │             │  User/Animal Data │
+      └─────────┬────────┘             └──────────────────┘
+                │
+                ▼
+      ┌──────────────────┐
+      │ Disease Prediction│
+      │ & Risk Assessment │
+      └──────────────────┘
+```
+
+---
+
+# 📁 Project Structure
+
+```text
+GramVet-Disease_Decoders/
+│
+├── app.py
+├── app_spatiotemporal.py
+├── requirements.txt
+├── README.md
+├── run_windows.bat
+│
+├── templates/
+│   └── index.html
+│
+├── ml_package/
+│   ├── README.md
+│   ├── predict_disease.py
+│   └── bovine_surveillance_dataset_updated.csv
+│
+├── .gitignore
+│
+└── .venv/                  # Local virtual environment
+```
+
+> `.venv/` should remain local and should **not** be committed to GitHub.
+
+---
+
+# 🤖 Machine Learning
+
+The ML component is responsible for analyzing livestock health and surveillance information and generating disease predictions.
+
+### Input Parameters
+
+Depending on the prediction model, the system can use parameters including:
+
+| Category    | Parameters                                 |
+| ----------- | ------------------------------------------ |
+| Animal      | Animal identification/details              |
+| Symptoms    | Observed symptoms                          |
+| Herd        | Herd size                                  |
+| Vaccination | Vaccination dates/history                  |
+| Environment | Distance to nearest water body             |
+| Time        | Vaccination recency / temporal information |
+| Location    | Relevant geographical information          |
+
+### Prediction Pipeline
+
+```text
+User Input
+    │
+    ▼
+Data Validation
+    │
+    ▼
+Feature Processing
+    │
+    ▼
+ML Model
+    │
+    ▼
+Disease Prediction
+    │
+    ▼
+Risk / Health Report
+```
+
+The ML implementation and associated dataset are located inside:
+
+```text
+ml_package/
+```
+
+---
+
+# 🗄️ Data & Database
+
+GramVet stores relevant user and livestock information so that health records can be maintained over time.
+
+Typical information includes:
+
+* User information
+* Animal information
+* Symptoms
+* Vaccination records
+* Herd information
+* Environmental information
+* Prediction results
+
+Sensitive credentials and secrets should be stored using environment variables rather than directly inside source code.
+
+---
+
+# 🛠️ Technology Stack
+
+### Frontend
+
+* HTML5
+* CSS3
+* JavaScript
+* Responsive UI
+
+### Backend
+
+* Python
+* Flask
+
+### Machine Learning
+
+* Python
+* Scikit-learn / ML libraries used by the prediction pipeline
+* Pandas
+* NumPy
+
+### Database
+
+* MongoDB / MongoDB Atlas
+
+### Development Tools
+
+* Git
+* GitHub
+* Python Virtual Environment
+
+---
+
+# 🚀 Installation & Setup
+
+## 1. Clone the Repository
+
+```bash
+git clone https://github.com/AmitKumar7833/GramVet-Disease_Decoders.git
+```
+
+```bash
+cd GramVet-Disease_Decoders
+```
+
+---
+
+# 🧪 Testing
+
+Before deployment, test the following workflows:
+
+* [ ] User registration
+* [ ] User login
+* [ ] Animal creation
+* [ ] Animal information update
+* [ ] Symptom input
+* [ ] Vaccination date input
+* [ ] Vaccination-month calculation
+* [ ] Herd-size input
+* [ ] Water-body distance input
+* [ ] Disease prediction
+* [ ] Report generation
+* [ ] Database persistence
+* [ ] Marathi language interface
+* [ ] Responsive design
+
+---
+
+# 🌱 Future Scope
+
+GramVet can be expanded with:
+
+* 📱 Android/mobile application
+* 🎙️ Voice-based interaction for farmers
+* 🗣️ Regional-language voice assistance
+* 📸 Disease detection using animal images
+* 🗺️ Village-level disease heatmaps
+* 🔔 Vaccination reminders
+* 🚨 Early disease outbreak alerts
+* ☁️ Cloud-based livestock health records
+* 👨‍⚕️ Veterinary expert consultation
+* 📊 Advanced disease surveillance dashboards
+* 🌦️ Integration with weather and environmental datasets
+
+---
+
 
 ## Run on Windows
 1. Open this folder in VS Code / terminal.
