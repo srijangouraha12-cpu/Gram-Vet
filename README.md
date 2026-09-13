@@ -239,10 +239,12 @@ Sensitive credentials and secrets should be stored using environment variables r
 * Scikit-learn / ML libraries used by the prediction pipeline
 * Pandas
 * NumPy
+* joblib
 
 ### Database
 
 * MongoDB / MongoDB Atlas
+* SQLite3
 
 ### Development Tools
 
@@ -252,19 +254,7 @@ Sensitive credentials and secrets should be stored using environment variables r
 
 ---
 
-# 🚀 Installation & Setup
 
-## 1. Clone the Repository
-
-```bash
-git clone https://github.com/AmitKumar7833/GramVet-Disease_Decoders.git
-```
-
-```bash
-cd GramVet-Disease_Decoders
-```
-
----
 
 # 🧪 Testing
 
@@ -282,7 +272,7 @@ Before deployment, test the following workflows:
 * [ ] Disease prediction
 * [ ] Report generation
 * [ ] Database persistence
-* [ ] Marathi language interface
+* [ ] Marathi and hindi  language interface for farmer
 * [ ] Responsive design
 
 ---
