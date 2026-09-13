@@ -1,0 +1,1372 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GramVet | Livestock Health Network</title>
+<style>
+:root{--green:#16734b;--green2:#239762;--deep:#0e3b28;--bg:#f5f8f5;--card:#fff;--ink:#172a20;--muted:#708078;--line:#e3ebe5;--soft:#edf7f0;--amber:#b87917;--red:#c94b4b;--shadow:0 12px 35px rgba(17,54,36,.08)}
+[data-theme="dark"]{--green:#2ecc71;--green2:#27ae60;--deep:#0a1f15;--bg:#0f1712;--card:#18261e;--ink:#e8f0eb;--muted:#8ba696;--line:#2a3d32;--soft:#1d3326;--amber:#f39c12;--red:#e74c3c;--shadow:0 12px 35px rgba(0,0,0,.3)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;transition:background .3s,color .3s}button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}.hidden{display:none!important}
+header{height:72px;background:var(--card);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:8}.brand{display:flex;align-items:center;gap:11px;font-weight:850;font-size:20px}.logo{width:40px;height:40px;background:var(--green);color:#fff;border-radius:12px;display:grid;place-items:center;box-shadow:0 5px 15px #16734b30}.topright{display:flex;gap:10px;align-items:center}.role{background:var(--soft);color:var(--green);padding:7px 10px;border-radius:99px;font-size:12px;font-weight:800}
+.layout{display:flex;min-height:calc(100vh - 72px)}aside{width:245px;background:var(--deep);padding:22px 13px;color:#dcebe2}.side-title{font-size:11px;letter-spacing:1.1px;text-transform:uppercase;color:#8eb6a1;padding:0 11px 10px}.nav{display:block;width:100%;border:0;background:transparent;color:#dcebe2;padding:12px;border-radius:10px;text-align:left;margin:4px 0}.nav.active,.nav:hover{background:#20583e;color:#fff}.main{width:100%;max-width:1500px;margin:auto;padding:30px}
+h1{font-size:29px;line-height:1.1;margin:0 0 7px}.subtitle{color:var(--muted);margin:0 0 24px}.grid{display:grid;gap:18px}.four{grid-template-columns:repeat(4,1fr)}.three{grid-template-columns:repeat(3,1fr)}.two{grid-template-columns:1.15fr .85fr}
+.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:20px;box-shadow:var(--shadow)}.stat{min-height:118px;display:flex;justify-content:space-between}.eyebrow{font-size:12px;color:var(--muted)}.big{font-size:30px;font-weight:850;margin-top:8px}.stat-icon{width:42px;height:42px;border-radius:12px;background:var(--soft);display:grid;place-items:center;font-size:20px}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}.toolbar h3{margin:0}.btn{background:var(--green);color:#fff;border:0;border-radius:10px;padding:10px 14px;font-weight:750;transition:transform .1s}.btn:active{transform:scale(.97)}.btn.secondary{background:var(--soft);color:var(--green)}.btn.ghost{background:transparent;color:var(--muted)}.btn.danger{background:#fff0f0;color:var(--red)}.btn.amber{background:#fff4db;color:#8a5d14}
+[data-theme="dark"] .btn.danger{background:#3b1818}[data-theme="dark"] .btn.amber{background:#3d2f16}
+label.field{display:block;margin:11px 0}.label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}input,select,textarea{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:11px 12px;outline:none;color:var(--ink)}input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px var(--soft)}textarea{min-height:80px;resize:vertical}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:12px 9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}.tablewrap{overflow:auto}
+.pill{display:inline-block;border-radius:99px;padding:5px 8px;background:var(--soft);color:var(--green);font-size:11px;font-weight:750}.pill.warn{background:#fff2d9;color:#9b6918}.pill.bad{background:#ffe8e8;color:#b43d3d}.pill.info{background:#eaf1ff;color:#45659c}
+[data-theme="dark"] .pill.warn{background:#3d2f16;color:#e8a43f}[data-theme="dark"] .pill.bad{background:#3b1818;color:#e86a6a}[data-theme="dark"] .pill.info{background:#17253b;color:#6d9beb}
+.notice{padding:12px;border-radius:11px;background:var(--soft);font-size:13px}.notice.red{background:#fff0f0;color:var(--red)}.notice.amber{background:#fff6e4;color:var(--amber)}.notice.blue{background:#edf3ff;color:#45659c}
+[data-theme="dark"] .notice.red{background:#3b1818}[data-theme="dark"] .notice.amber{background:#3d2f16}[data-theme="dark"] .notice.blue{background:#17253b}
+.muted{color:var(--muted);font-size:13px}.muted2{color:var(--muted);font-size:11px}.animal-line{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.animal-icon{width:43px;height:43px;border-radius:12px;background:var(--soft);display:grid;place-items:center;font-size:21px}
+.symgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.sym{border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--card);cursor:pointer}.sym:hover{border-color:var(--green);background:var(--soft)}.sym input{width:auto;margin-right:6px}
+.authwrap{display:block;min-height:100vh;background:var(--bg)}
+.auth-hero{position:relative;min-height:100vh;display:flex;flex-direction:column;background:var(--deep);overflow:hidden}
+.auth-hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;animation:fadeBg 12s infinite;z-index:0}
+.auth-hero-bg:nth-child(1){background-image:url('/media/clean_landscape_169_1789271082815.jpg');animation-delay:0s; opacity:1; animation:none;}
+.auth-hero-bg:nth-child(2){display:none}
+.auth-hero-bg:nth-child(3){display:none}
+@keyframes fadeBg { 0%, 40% { opacity: 1; } 50%, 90% { opacity: 0; } 100% { opacity: 1; } }
+.auth-header{position:relative;z-index:2;padding:20px 40px;display:flex;justify-content:space-between;align-items:center;background:transparent}
+.auth-header .brand{color:var(--green);font-size:24px;display:flex;align-items:center}
+.auth-hero-text{position:relative;z-index:2;flex:1;display:flex;align-items:center;justify-content:center;padding:20px}
+.auth-hero-text h1{color:#fff;font-size:46px;text-align:center;max-width:900px;text-transform:uppercase;letter-spacing:1.5px;text-shadow:0 4px 20px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.5)}
+.hero-wave{position:absolute;bottom:0;left:0;width:100%;height:auto;z-index:3;display:block}
+.hero-wave path{fill:var(--bg);transition:fill .3s}
+.auth-content{position:relative;z-index:4;padding:0 20px 40px;display:flex;flex-direction:column;align-items:center}
+.auth-welcome{text-align:center;margin-bottom:25px;color:var(--ink)}
+.auth-welcome h2{font-size:24px;text-transform:uppercase;color:#456b57;letter-spacing:1px;margin:0 0 8px}
+.auth-box{width:min(520px,100%);background:var(--card);border:1px solid var(--line);border-radius:24px;padding:35px;box-shadow:var(--shadow);margin-top:-20px}
+.switch{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);padding:5px;border-radius:14px;margin:0 0 25px}.switch button{border:0;background:transparent;padding:12px;border-radius:10px;color:var(--muted);font-weight:700}.switch .active{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:2px 14px}.full{grid-column:1/-1}.modal{position:fixed;inset:0;background:#0d2b1d99;display:grid;place-items:center;padding:18px;z-index:20;backdrop-filter:blur(4px)}.modalbox{background:var(--card);width:min(760px,100%);max-height:92vh;overflow:auto;border-radius:24px;padding:30px;box-shadow:0 30px 60px rgba(0,0,0,0.2)}.close{float:right;border:0;border-radius:50%;width:36px;height:36px;background:var(--soft);color:var(--ink);font-size:18px;display:grid;place-items:center}
+.bar{height:12px;background:var(--bg);border-radius:99px;overflow:hidden}.bar>span{display:block;height:100%;background:var(--green);border-radius:99px}.riskdot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;background:var(--muted)}.riskdot.high{background:var(--red)}.riskdot.med{background:var(--amber)}.riskdot.low{background:var(--green)}
+.kpi{font-size:12px;color:var(--muted)}.timeline{border-left:2px solid var(--line);margin:15px 0;padding-left:17px}.timeline-item{margin-bottom:15px;position:relative}.timeline-item:before{content:"";position:absolute;width:9px;height:9px;border-radius:50%;background:var(--green);left:-22px;top:5px}.notif{border-bottom:1px solid var(--line);padding:12px 0}.notif.unread{background:var(--soft)}.mapgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:11px}.villagebox{border:1px solid var(--line);border-radius:13px;padding:13px}.mini{font-size:11px;color:var(--muted)}
+.theme-toggle{background:var(--soft);border:none;border-radius:50%;width:36px;height:36px;display:grid;place-items:center;font-size:16px;color:var(--ink)}
+[data-theme="dark"] .brand img { filter: invert(1) hue-rotate(180deg) brightness(1.5); }
+.logo-blend { mix-blend-mode: multiply; filter: contrast(1.4) brightness(1.1); }
+@media(max-width:1050px){aside{width:70px}.side-title,.nav span{display:none}.four{grid-template-columns:repeat(2,1fr)}.three,.two{grid-template-columns:1fr 1fr}.main{padding:19px}}
+@media(max-width:650px){header{padding:0 13px}.four,.three,.two,.formgrid,.symgrid{grid-template-columns:1fr}.main{padding:13px}.role{display:none}.auth-header{padding:15px 20px}.auth-hero-text h1{font-size:32px}}
+</style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+<div id="auth" class="authwrap">
+  <div class="auth-hero">
+    <div class="auth-hero-bg"></div>
+    <div class="auth-hero-bg"></div>
+    <div class="auth-hero-bg"></div>
+    <div class="auth-header">
+      <div class="brand">
+        <img src="/media/media_1789259054136.png" class="logo-blend" style="height:50px;margin-right:15px" alt="MoE">
+        <img src="/media/media_1789259000785.png" class="logo-blend" style="height:45px;margin-right:15px" alt="SIH">
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeBtnAuth" style="mix-blend-mode:multiply">🌙</button>
+        <select id="langAuth" onchange="setLanguage(this.value)" style="border-radius:10px;padding:6px 10px;font-size:12px;background:var(--soft);border:none;font-weight:700;cursor:pointer;color:var(--ink);mix-blend-mode:multiply">
+          <option value="en">English</option>
+          <option value="hi">हिन्दी (Hindi)</option>
+          <option value="mr">मराठी (Marathi)</option>
+        </select>
+      </div>
+    </div>
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;z-index:2;position:relative;">
+      <img src="/media/media_1789273121511.png" style="height:220px;opacity:0.95" alt="GramVet Logo">
+    </div>
+    <div class="auth-content" style="padding-bottom:60px">
+      <div class="auth-box" style="margin-top:0">
+      <div class="auth-welcome">
+        <h2 id="authWelcome">WELCOME TO GRAMVET</h2>
+        <p class="subtitle" id="authSubtitle">Role-based access for farmers, veterinarians and government officials.</p>
+      </div>
+      <div class="switch">
+        <button id="loginSwitch" class="active" onclick="authMode('login')">Sign in</button>
+        <button id="signupSwitch" onclick="authMode('signup')">Create account</button>
+      </div>
+      <div id="authBody"></div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+<header>
+  <div class="brand"><img src="/media/media_1789273121511.png" style="height:35px;opacity:0.9" alt="GramVet Logo"></div>
+  <div class="topright">
+    <div style="display:flex;align-items:center;gap:8px;margin-right:6px">
+      <button class="theme-toggle" onclick="toggleTheme()" id="themeBtnApp">🌙</button>
+      <span style="font-size:14px">🌐</span>
+      <select id="langApp" onchange="setLanguage(this.value)" style="border-radius:10px;padding:6px 10px;font-size:12px;background:var(--soft);border:none;font-weight:750;cursor:pointer">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी (Hindi)</option>
+        <option value="mr">मराठी (Marathi)</option>
+      </select>
+    </div>
+    <button class="btn secondary" onclick="notifications()">🔔 <span id="notifCount">0</span></button>
+    <span id="role" class="role"></span>
+    <button class="btn secondary" onclick="logout()" id="logoutBtn">Logout</button>
+  </div>
+</header>
+<div class="layout">
+<aside>
+  <div class="side-title">Workspace</div>
+  <button class="nav active" data-p="dashboard" onclick="go('dashboard')">🏠 <span>Dashboard</span></button>
+  <button class="nav" data-p="livestock" onclick="go('livestock')">🐄 <span>Livestock</span></button>
+  <button class="nav" data-p="health" onclick="go('health')">🩺 <span>Health / Cases</span></button>
+  <button class="nav" data-p="notifications" onclick="go('notifications')">🔔 <span>Notifications</span></button>
+  <button class="nav" data-p="farmers" onclick="go('farmers')">👨‍🌾 <span>Farmers / Villages</span></button>
+  <button class="nav" data-p="outbreak" onclick="go('outbreak')">🚨 <span>Outbreaks</span></button>
+  <button class="nav" data-p="govt" onclick="go('govt')">🏛️ <span>Government</span></button>
+</aside>
+<main class="main" id="main"></main>
+</div></div>
+
+<div id="modal" class="modal hidden"><div class="modalbox"><button class="close" onclick="closeModal()">×</button><div id="modalBody"></div></div></div>
+
+<script>
+window.userLat = null;
+window.userLon = null;
+var currentLang = localStorage.getItem("gramvet_lang") || "en";
+var currentTheme = localStorage.getItem("gramvet_theme") || "light";
+var currentAuthMode = "login";
+
+function applyTheme() {
+  if (currentTheme === "dark") {
+    document.documentElement.setAttribute("data-theme", "dark");
+    if(document.getElementById("themeBtnAuth")) document.getElementById("themeBtnAuth").textContent = "☀️";
+    if(document.getElementById("themeBtnApp")) document.getElementById("themeBtnApp").textContent = "☀️";
+  } else {
+    document.documentElement.removeAttribute("data-theme");
+    if(document.getElementById("themeBtnAuth")) document.getElementById("themeBtnAuth").textContent = "🌙";
+    if(document.getElementById("themeBtnApp")) document.getElementById("themeBtnApp").textContent = "🌙";
+  }
+}
+function toggleTheme() {
+  currentTheme = currentTheme === "dark" ? "light" : "dark";
+  localStorage.setItem("gramvet_theme", currentTheme);
+  applyTheme();
+}
+applyTheme();
+
+var I18N = {
+  en: {
+    app_title: "GramVet | Livestock Health Network",
+    brand_title: "Livestock disease early-warning network",
+    brand_sub: "Role-based access for farmers, veterinarians and government officials.",
+    signin: "Sign in",
+    signup: "Create account",
+    phone: "Mobile number",
+    password: "Password",
+    full_name: "Full name",
+    account_type: "Account type",
+    role_farmer: "Farmer",
+    role_vet: "Veterinarian",
+    role_gov: "Government Official",
+    pincode: "Pincode",
+    village: "Village",
+    ward: "Ward",
+    address: "Address",
+    gps_btn: "📍 Autofill location from GPS",
+    gps_locating: "⏳ Locating...",
+    gps_captured: "✅ Location captured!",
+    vet_auth_id: "Government Auth ID",
+    office_address: "Office Address",
+    gov_auth_code: "Govt Auth Code",
+    create_account_btn: "Create my account",
+    workspace: "Workspace",
+    nav_dashboard: "Dashboard",
+    nav_livestock: "Livestock",
+    nav_health: "Health / Cases",
+    nav_notifications: "Notifications",
+    nav_farmers: "Farmers / Villages",
+    nav_outbreak: "Outbreaks",
+    nav_govt: "Government",
+    logout: "Logout",
+    err_phone: "Mobile number must be 10 digits starting with 9, 8, 7 or 6.",
+    err_pass: "Password must be at least 4 characters.",
+    gps_denied_village_search: "GPS denied. Searching location for entered village...",
+    add_livestock: "+ Add livestock",
+    report_issue: "Report issue",
+    full_history: "Full history",
+    open_case: "Open",
+    save_report: "Save report & Run model",
+    running_model: "Running model…",
+    select_symptom: "Please select at least one symptom.",
+    demo_accounts: "Default accounts (Password: 12345):",
+    my_livestock: "My livestock",
+    open_cases: "Open cases",
+    closed_history: "Closed cases",
+    my_village: "My village",
+    recent_cases: "Recent cases",
+    assigned_livestock: "Assigned livestock",
+    vaccination_cov: "Vaccination coverage",
+    resources: "Resources",
+    high_priority: "High priority",
+    priority_cases: "Priority cases",
+    all_cases: "All cases",
+    lookup_title: "Owner / cattle lookup",
+    search_placeholder: "Search owner / animal / ID",
+    welcome: "Welcome",
+    farmer_dash_title: "Farmer dashboard",
+    farmer_dash_sub: "Register livestock, report symptoms and track every case forever.",
+    vet_dash_title: "Veterinary command centre",
+    vet_dash_sub: "Review assigned villages, prioritise cases, record actions and confirm outbreaks.",
+    auth_hero_title: "WHERE RURAL TRADITION MEETS VETERINARY EXPERTISE",
+    auth_welcome: "WELCOME TO GRAMVET",
+    tbl_id: "ID / animal",
+    tbl_owner: "Owner",
+    tbl_village: "Village",
+    tbl_vacc: "Vaccinated",
+    tbl_latest: "Latest issue",
+    tbl_vet: "Vet",
+    tbl_case: "Case",
+    tbl_opened: "Opened",
+    tbl_status: "Status",
+    m_add_livestock: "Add livestock",
+    m_edit_livestock: "Edit livestock",
+    m_add_livestock_sub: "Only Cow/Cattle and Buffalo are supported because those are the model's trained classes.",
+    m_assigned_id: "Assigned ID / tag",
+    m_assigned_id_locked: "Assigned ID / tag (locked)",
+    m_animal_name: "Animal name",
+    m_species: "Species",
+    m_sex: "Sex",
+    m_breed: "Breed",
+    m_age: "Age",
+    m_last_vacc_date: "Last vaccination date",
+    m_save_changes: "Save changes",
+    m_perm_record: "Permanent animal record. Every report, treatment, vaccination and previous case remains visible.",
+    m_prev_cases: "Previous cases",
+    m_times_cured: "Times cured",
+    m_vaccinations: "Vaccinations",
+    m_owner: "Owner",
+    m_vacc_history: "Vaccination history",
+    m_no_vacc: "No vaccination events recorded yet.",
+    m_no_cases: "No cases recorded yet.",
+    m_report_desc: "Use the same 20 symptom inputs the trained disease model expects. Each submission is timestamped and becomes part of the animal's permanent case history.",
+    m_farm_inputs: "Farm inputs",
+    m_sent_ml: "Sent to ML model",
+    m_herd_size: "Herd size",
+    m_water_body: "Nearest water body (km)",
+    m_vacc_fmd: "FMD vaccination date",
+    m_vacc_hs: "HS vaccination date",
+    m_vacc_lsd: "LSD vaccination date",
+    m_vacc_bq: "BQ vaccination date",
+    m_notes_opt: "Additional notes (optional)",
+    m_live_wx: "Live weather",
+    m_wx_gps: "your current GPS location",
+    m_wx_animal: "this animal's registered location",
+    m_wx_village: "the registered village location",
+    m_wx_avail: "the available location",
+    m_temp: "Temperature",
+    m_hum: "Humidity",
+    m_rain: "Rainfall (today)",
+    m_season: "Season",
+    m_wx_desc: "These 4 values are sent to the disease model together with the symptoms you select.",
+    m_refresh: "Refresh",
+    m_detecting: "Detecting your location and fetching current weather (temperature, humidity, rainfall, season)…",
+    m_disease: "Disease",
+    m_triage: "Triage",
+    m_outbreak: "Outbreak / escalation",
+    m_animal: "Animal",
+    m_status: "Status",
+    m_opened: "Opened",
+    m_closed: "Closed",
+    m_perm_hist: "Permanent history",
+    m_no_reports: "No reports",
+    m_report: "Report",
+    m_assigned_vet: "Assigned vet:",
+    m_model: "Model:",
+    d_fmd: "Foot and Mouth Disease (FMD)",
+    d_lsd: "Lumpy Skin Disease (LSD)",
+    d_hs: "Hemorrhagic Septicemia (HS)",
+    d_bq: "Black Quarter (BQ)",
+    d_mastitis: "Mastitis",
+    t_high: "High",
+    t_moderate: "Moderate",
+    t_low: "Low",
+    t_severe: "Severe",
+    t_elevated: "Elevated",
+    m_pass_hint: "Password must be at least 4 characters"
+  },
+  hi: {
+    app_title: "ग्रामवेट | पशुधन स्वास्थ्य नेटवर्क",
+    brand_title: "पशुधन रोग पूर्व-चेतावनी नेटवर्क",
+    brand_sub: "किसानों, पशु चिकित्सकों और सरकारी अधिकारियों के लिए भूमिका-आधारित पहुंच।",
+    signin: "साइन इन",
+    signup: "खाता बनाएं",
+    phone: "मोबाइल नंबर",
+    password: "पासवर्ड",
+    full_name: "पूरा नाम",
+    account_type: "खाते का प्रकार",
+    role_farmer: "किसान",
+    role_vet: "पशु चिकित्सक",
+    role_gov: "सरकारी अधिकारी",
+    pincode: "पिनकोड",
+    village: "गाँव",
+    ward: "वार्ड",
+    address: "पता",
+    gps_btn: "📍 जीपीएस द्वारा स्थान भरें",
+    gps_locating: "⏳ जीपीएस / गाँव खोज रहे हैं...",
+    gps_captured: "✅ स्थान दर्ज किया गया!",
+    vet_auth_id: "सरकारी प्राधिकरण आईडी",
+    office_address: "कार्यालय / पता",
+    gov_auth_code: "सरकारी प्राधिकरण कोड",
+    create_account_btn: "मेरा खाता बनाएं",
+    workspace: "कार्यक्षेत्र",
+    nav_dashboard: "डैशबोर्ड",
+    nav_livestock: "पशुधन",
+    nav_health: "स्वास्थ्य / मामले",
+    nav_notifications: "सूचनाएं",
+    nav_farmers: "किसान / गाँव",
+    nav_outbreak: "प्रकोप चेतावनी",
+    nav_govt: "सरकारी पोर्टल",
+    logout: "लॉगआउट",
+    err_phone: "मोबाइल नंबर 9, 8, 7 या 6 से शुरू होने वाला 10 अंकों का नंबर होना चाहिए।",
+    err_pass: "पासवर्ड कम से कम 4 अंकों/अक्षरों का होना चाहिए।",
+    gps_denied_village_search: "जीपीएस उपलब्ध नहीं है। दर्ज गाँव के लिए स्थान खोजा जा रहा है...",
+    add_livestock: "+ पशुधन जोड़ें",
+    report_issue: "समस्या दर्ज करें",
+    full_history: "पूरा इतिहास",
+    open_case: "खोलें",
+    save_report: "रिपोर्ट सहेजें और मॉडल चलाएं",
+    running_model: "मॉडल चल रहा है…",
+    select_symptom: "कृपया कम से कम एक लक्षण चुनें।",
+    demo_accounts: "डिफ़ॉल्ट खाते (पासवर्ड: 12345):",
+    my_livestock: "मेरे पशु",
+    open_cases: "सक्रिय मामले",
+    closed_history: "हल किए गए मामले",
+    my_village: "मेरा गाँव",
+    recent_cases: "हाल के मामले",
+    assigned_livestock: "आवंटित पशुधन",
+    vaccination_cov: "टीकाकरण कवरेज",
+    resources: "संसाधन",
+    high_priority: "उच्च प्राथमिकता",
+    priority_cases: "प्राथमिकता वाले मामले",
+    all_cases: "सभी मामले",
+    lookup_title: "मालिक / मवेशी खोजें",
+    search_placeholder: "मालिक / पशु / आईडी खोजें",
+    welcome: "स्वागत है",
+    farmer_dash_title: "किसान डैशबोर्ड",
+    farmer_dash_sub: "पशुधन पंजीकृत करें, लक्षणों की रिपोर्ट करें और हर मामले का इतिहास देखें।",
+    vet_dash_title: "पशु चिकित्सा कमान केंद्र",
+    vet_dash_sub: "आवंटित गांवों की समीक्षा करें, मामलों को प्राथमिकता दें और उपचार दर्ज करें।",
+    auth_hero_title: "जहां ग्रामीण परंपरा और पशु चिकित्सा विशेषज्ञता मिलते हैं",
+    auth_welcome: "ग्रामवेट में आपका स्वागत है",
+    tbl_id: "आईडी / पशु",
+    tbl_owner: "मालिक",
+    tbl_village: "गाँव",
+    tbl_vacc: "टीकाकरण",
+    tbl_latest: "नवीनतम समस्या",
+    tbl_vet: "डॉक्टर",
+    tbl_case: "मामला",
+    tbl_opened: "खुला",
+    tbl_status: "स्थिति",
+    m_add_livestock: "पशुधन जोड़ें",
+    m_edit_livestock: "पशुधन संपादित करें",
+    m_add_livestock_sub: "केवल गाय और भैंस समर्थित हैं क्योंकि मॉडल इन्हीं वर्गों पर प्रशिक्षित है।",
+    m_assigned_id: "आवंटित आईडी / टैग",
+    m_assigned_id_locked: "आवंटित आईडी / टैग (लॉक)",
+    m_animal_name: "पशु का नाम",
+    m_species: "प्रजाति",
+    m_sex: "लिंग",
+    m_breed: "नस्ल",
+    m_age: "उम्र",
+    m_last_vacc_date: "अंतिम टीकाकरण तिथि",
+    m_save_changes: "बदलाव सहेजें",
+    m_perm_record: "स्थायी पशु रिकॉर्ड। प्रत्येक रिपोर्ट, उपचार, टीकाकरण और पिछला मामला यहाँ दिखाई देगा।",
+    m_prev_cases: "पिछले मामले",
+    m_times_cured: "कितनी बार ठीक हुआ",
+    m_vaccinations: "टीकाकरण",
+    m_owner: "मालिक",
+    m_vacc_history: "टीकाकरण इतिहास",
+    m_no_vacc: "अभी तक कोई टीकाकरण दर्ज नहीं किया गया है।",
+    m_no_cases: "अभी तक कोई मामला दर्ज नहीं किया गया है।",
+    m_report_desc: "प्रशिक्षित बीमारी मॉडल के लिए समान 20 लक्षण इनपुट का उपयोग करें। प्रत्येक रिपोर्ट समयबद्ध है और पशु के स्थायी रिकॉर्ड का हिस्सा बन जाएगी।",
+    m_farm_inputs: "खेत/फॉर्म इनपुट",
+    m_sent_ml: "मॉडल को भेजा गया",
+    m_herd_size: "झुंड का आकार",
+    m_water_body: "निकटतम जल स्रोत (किमी)",
+    m_vacc_fmd: "FMD टीकाकरण तिथि",
+    m_vacc_hs: "HS टीकाकरण तिथि",
+    m_vacc_lsd: "LSD टीकाकरण तिथि",
+    m_vacc_bq: "BQ टीकाकरण तिथि",
+    m_notes_opt: "अतिरिक्त जानकारी (वैकल्पिक)",
+    m_live_wx: "लाइव मौसम",
+    m_wx_gps: "आपका वर्तमान जीपीएस स्थान",
+    m_wx_animal: "इस पशु का पंजीकृत स्थान",
+    m_wx_village: "पंजीकृत गाँव का स्थान",
+    m_wx_avail: "उपलब्ध स्थान",
+    m_temp: "तापमान",
+    m_hum: "नमी (आर्द्रता)",
+    m_rain: "बारिश (आज)",
+    m_season: "मौसम",
+    m_wx_desc: "आपके द्वारा चुने गए लक्षणों के साथ यह 4 मान भी बीमारी मॉडल को भेजे जाते हैं।",
+    m_refresh: "ताज़ा करें",
+    m_detecting: "आपका स्थान खोजा जा रहा है और मौसम (तापमान, नमी, बारिश, मौसम) प्राप्त किया जा रहा है…",
+    m_disease: "बीमारी",
+    m_triage: "प्राथमिकता (Triage)",
+    m_outbreak: "प्रकोप (Outbreak) / वृद्धि",
+    m_animal: "पशु",
+    m_status: "स्थिति",
+    m_opened: "खुला",
+    m_closed: "बंद",
+    m_perm_hist: "स्थायी इतिहास",
+    m_no_reports: "कोई रिपोर्ट नहीं",
+    m_report: "रिपोर्ट",
+    m_assigned_vet: "नियुक्त डॉक्टर:",
+    m_model: "मॉडल:",
+    d_fmd: "खुरपका-मुंहपका (FMD)",
+    d_lsd: "लंपी त्वचा रोग (LSD)",
+    d_hs: "गलाघोंटू (HS)",
+    d_bq: "लंगड़ा बुखार (BQ)",
+    d_mastitis: "थनैला रोग (Mastitis)",
+    t_high: "उच्च (High)",
+    t_moderate: "मध्यम (Moderate)",
+    t_low: "निम्न (Low)",
+    t_severe: "गंभीर (Severe)",
+    t_elevated: "बढ़ा हुआ (Elevated)",
+    m_pass_hint: "पासवर्ड कम से कम 4 अक्षरों का होना चाहिए"
+  },
+  mr: {
+    app_title: "ग्रामव्हेट | पशुधन आरोग्य नेटवर्क",
+    brand_title: "पशुधन रोग पूर्वसूचना प्रणाली",
+    brand_sub: "शेतकरी, पशुवैद्यकीय अधिकारी आणि शासकीय अधिकाऱ्यांसाठी भूमिका-आधारित प्रवेश.",
+    signin: "साइन इन",
+    signup: "खाते तयार करा",
+    phone: "मोबाईल नंबर",
+    password: "पासवर्ड",
+    full_name: "पूर्ण नाव",
+    account_type: "खात्याचा प्रकार",
+    role_farmer: "शेतकरी",
+    role_vet: "पशुवैद्यकीय अधिकारी",
+    role_gov: "शासकीय अधिकारी",
+    pincode: "पिनकोड",
+    village: "गाव",
+    ward: "प्रभाग / वाॅर्ड",
+    address: "पत्ता",
+    gps_btn: "📍 जीपीएस द्वारे स्थान भरा",
+    gps_locating: "⏳ जीपीएस / गाव शोधत आहे...",
+    gps_captured: "✅ स्थान नोंदवले गेले!",
+    vet_auth_id: "शासकीय प्राधिकरण आयडी",
+    office_address: "कार्यालय / पत्ता",
+    gov_auth_code: "शासकीय प्राधिकरण कोड",
+    create_account_btn: "माझे खाते तयार करा",
+    workspace: "कार्यक्षेत्र",
+    nav_dashboard: "डॅशबोर्ड",
+    nav_livestock: "पशुधन",
+    nav_health: "आरोग्य / प्रकरणे",
+    nav_notifications: "सूचना",
+    nav_farmers: "शेतकरी / गावे",
+    nav_outbreak: "उद्रेक सूचना",
+    nav_govt: "शासन कक्ष",
+    logout: "लॉगआउट",
+    err_phone: "मोबाईल नंबर 9, 8, 7 किंवा 6 ने सुरू होणारा 10 अंकी नंबर असावा.",
+    err_pass: "पासवर्ड किमान 4 अंकी/अक्षरी असावा.",
+    gps_denied_village_search: "जीपीएस उपलब्ध नाही. दिलेल्या गावासाठी स्थान शोधत आहे...",
+    add_livestock: "+ पशुधन जोडा",
+    report_issue: "तक्रार नोंदवा",
+    full_history: "संपूर्ण इतिहास",
+    open_case: "उघडा",
+    save_report: "अहवाल जतन करा आणि मॉडेल चालवा",
+    running_model: "मॉडेल चालत आहे…",
+    select_symptom: "कृपया किमान एक लक्षण निवडा.",
+    demo_accounts: "डीफॉल्ट खाती (पासवर्ड: 12345):",
+    my_livestock: "माझे पशुधन",
+    open_cases: "सक्रिय प्रकरणे",
+    closed_history: "बंद प्रकरणे",
+    my_village: "माझे गाव",
+    recent_cases: "अलीकडील प्रकरणे",
+    assigned_livestock: "वाटप केलेले पशुधन",
+    vaccination_cov: "लसीकरण व्याप्ती",
+    resources: "संसाधने",
+    high_priority: "उच्च प्राधान्य",
+    priority_cases: "प्राधान्य प्रकरणे",
+    all_cases: "सर्व प्रकरणे",
+    lookup_title: "मालक / गुरे शोधा",
+    search_placeholder: "मालक / प्राणी / टॅग शोधा",
+    welcome: "स्वागत आहे",
+    farmer_dash_title: "शेतकरी डॅशबोर्ड",
+    farmer_dash_sub: "पशुधनाची नोंदणी करा, आजारांची तक्रार करा आणि संपूर्ण इतिहास पहा.",
+    vet_dash_title: "पशुवैद्यकीय कमान केंद्र",
+    vet_dash_sub: "नेमून दिलेल्या गावांचे निरीक्षण करा, प्राधान्य ठरवा आणि उपचारांची नोंद करा.",
+    auth_hero_title: "जिथे ग्रामीण परंपरा आणि पशुवैद्यकीय कौशल्य एकत्र येतात",
+    auth_welcome: "ग्रामव्हेट मध्ये आपले स्वागत आहे",
+    tbl_id: "आयडी / जनावर",
+    tbl_owner: "मालक",
+    tbl_village: "गाव",
+    tbl_vacc: "लसीकरण",
+    tbl_latest: "नवीनतम समस्या",
+    tbl_vet: "डॉक्टर",
+    tbl_case: "प्रकरण",
+    tbl_opened: "उघडले",
+    tbl_status: "स्थिती",
+    m_add_livestock: "पशुधन जोडा",
+    m_edit_livestock: "पशुधन संपादित करा",
+    m_add_livestock_sub: "केवळ गाय आणि म्हैस समर्थित आहेत कारण मॉडेल याच वर्गांसाठी प्रशिक्षित आहे.",
+    m_assigned_id: "आयडी / टॅग नोंदवा",
+    m_assigned_id_locked: "आयडी / टॅग (लॉक)",
+    m_animal_name: "प्राण्याचे नाव",
+    m_species: "प्रजाती",
+    m_sex: "लिंग",
+    m_breed: "जात",
+    m_age: "वय",
+    m_last_vacc_date: "शेवटची लसीकरण तारीख",
+    m_save_changes: "बदल जतन करा",
+    m_perm_record: "कायमस्वरूपी प्राणी रेकॉर्ड. प्रत्येक अहवाल, उपचार, लसीकरण आणि मागील प्रकरण येथे दिसेल.",
+    m_prev_cases: "मागील प्रकरणे",
+    m_times_cured: "किती वेळा बरे झाले",
+    m_vaccinations: "लसीकरण",
+    m_owner: "मालक",
+    m_vacc_history: "लसीकरण इतिहास",
+    m_no_vacc: "अद्याप कोणतीही लसीकरण नोंद नाही.",
+    m_no_cases: "अद्याप कोणतेही प्रकरण नोंदवलेले नाही.",
+    m_report_desc: "प्रशिक्षित आजार मॉडेलसाठी समान 20 लक्षणे वापरा. प्रत्येक अहवाल वेळेनुसार नोंदवला जातो आणि प्राण्याच्या कायमस्वरूपी रेकॉर्डचा भाग बनतो.",
+    m_farm_inputs: "शेत/फार्म माहिती",
+    m_sent_ml: "मॉडेलला पाठवले",
+    m_herd_size: "कळपाचा आकार",
+    m_water_body: "जवळचा जलस्रोत (किमी)",
+    m_vacc_fmd: "FMD लसीकरण तारीख",
+    m_vacc_hs: "HS लसीकरण तारीख",
+    m_vacc_lsd: "LSD लसीकरण तारीख",
+    m_vacc_bq: "BQ लसीकरण तारीख",
+    m_notes_opt: "अतिरिक्त माहिती (ऐच्छिक)",
+    m_live_wx: "थेट हवामान",
+    m_wx_gps: "तुमचे सध्याचे जीपीएस स्थान",
+    m_wx_animal: "या प्राण्याचे नोंदणीकृत स्थान",
+    m_wx_village: "नोंदणीकृत गावाचे स्थान",
+    m_wx_avail: "उपलब्ध स्थान",
+    m_temp: "तापमान",
+    m_hum: "आर्द्रता (नमी)",
+    m_rain: "पाऊस (आज)",
+    m_season: "ऋतू",
+    m_wx_desc: "तुम्ही निवडलेल्या लक्षणांसह ही 4 मूल्ये आजार मॉडेलला पाठवली जातात.",
+    m_refresh: "रिफ्रेश करा",
+    m_detecting: "तुमचे स्थान शोधत आहे आणि हवामान (तापमान, आर्द्रता, पाऊस, ऋतू) मिळवत आहे…",
+    m_disease: "आजार",
+    m_triage: "प्राधान्य (Triage)",
+    m_outbreak: "उद्रेक (Outbreak) / वाढ",
+    m_animal: "प्राणी",
+    m_status: "स्थिती",
+    m_opened: "उघडले",
+    m_closed: "बंद",
+    m_perm_hist: "कायमस्वरूपी इतिहास",
+    m_no_reports: "कोणताही अहवाल नाही",
+    m_report: "अहवाल",
+    m_assigned_vet: "नेमलेले डॉक्टर:",
+    m_model: "मॉडेल:",
+    d_fmd: "लाळ्या-खुरकूत (FMD)",
+    d_lsd: "लंपी आजार (LSD)",
+    d_hs: "घटसर्प (HS)",
+    d_bq: "फऱ्या (BQ)",
+    d_mastitis: "स्तनदाह (Mastitis)",
+    t_high: "उच्च (High)",
+    t_moderate: "मध्यम (Moderate)",
+    t_low: "कमी (Low)",
+    t_severe: "गंभीर (Severe)",
+    t_elevated: "वाढलेला (Elevated)",
+    m_pass_hint: "पासवर्ड किमान 4 अक्षरांचा असावा"
+  }
+};
+
+function t(key, fallback) {
+  let langMap = I18N[currentLang] || I18N.en;
+  return langMap[key] || I18N.en[key] || fallback || key;
+}
+
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem("gramvet_lang", lang);
+  if (document.getElementById("langAuth")) document.getElementById("langAuth").value = lang;
+  if (document.getElementById("langApp")) document.getElementById("langApp").value = lang;
+  updateStaticTexts();
+  if (gramvetState.currentUser) {
+    role.textContent = roleLabel();
+    go(current);
+  } else {
+    authMode(currentAuthMode);
+  }
+}
+
+function updateStaticTexts() {
+  document.title = t("app_title");
+  let at = document.getElementById("authTitle");
+  if (at) at.textContent = t("brand_title");
+  let as = document.getElementById("authSubtitle");
+  if (as) as.textContent = t("brand_sub");
+  let ls = document.getElementById("loginSwitch");
+  if (ls) ls.textContent = t("signin");
+  let ss = document.getElementById("signupSwitch");
+  if (ss) ss.textContent = t("signup");
+  let aht = document.getElementById("authHeroTitle");
+  if (aht) aht.textContent = t("auth_hero_title");
+  let aw = document.getElementById("authWelcome");
+  if (aw) aw.textContent = t("auth_welcome");
+  let st = document.querySelector(".side-title");
+  if (st) st.textContent = t("workspace");
+  let lb = document.getElementById("logoutBtn");
+  if (lb) lb.textContent = t("logout");
+  
+  document.querySelectorAll(".nav[data-p]").forEach(el => {
+    let p = el.dataset.p;
+    let span = el.querySelector("span");
+    if (span) span.textContent = t("nav_" + p);
+  });
+}
+
+function validatePhone(phone) {
+  let p = String(phone || "").trim().replace(/[\s\-\+]/g, "");
+  if (p.startsWith("91") && p.length === 12) p = p.slice(2);
+  else if (p.startsWith("0") && p.length === 11) p = p.slice(1);
+  if (p.length === 10 && /^[6-9]\d{9}$/.test(p)) {
+    return p;
+  }
+  return null;
+}
+
+async function searchVillageLocation(vName, pin, btn) {
+  if (!vName) return false;
+  let oldText = btn ? btn.innerHTML : "";
+  if (btn) btn.innerHTML = t("gps_locating");
+  try {
+    let q = encodeURIComponent(vName + (pin ? ", " + pin : "") + ", Maharashtra, India");
+    let r = await fetch(`https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1`);
+    let data = await r.json();
+    if (!data || !data.length) {
+      let q2 = encodeURIComponent(vName + ", India");
+      let r2 = await fetch(`https://nominatim.openstreetmap.org/search?q=${q2}&format=json&limit=1`);
+      data = await r2.json();
+    }
+    if (data && data.length > 0) {
+      window.userLat = parseFloat(data[0].lat);
+      window.userLon = parseFloat(data[0].lon);
+      if (btn) btn.innerHTML = t("gps_captured");
+      return true;
+    }
+  } catch(e) {}
+  if (btn) btn.innerHTML = oldText;
+  return false;
+}
+
+async function fetchGPS(btn) {
+    let oldText = btn.innerHTML;
+    btn.innerHTML = t("gps_locating");
+    
+    if (!navigator.geolocation) {
+        let v = (document.getElementById('svillage') ? document.getElementById('svillage').value : "").trim();
+        let pin = (document.getElementById('spin') ? document.getElementById('spin').value : "").trim();
+        if (v) {
+            let found = await searchVillageLocation(v, pin, btn);
+            if (found) return;
+        }
+        alert(t("gps_denied_village_search"));
+        btn.innerHTML = oldText;
+        return;
+    }
+    
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+        window.userLat = pos.coords.latitude;
+        window.userLon = pos.coords.longitude;
+        
+        try {
+            let r = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${window.userLat}&lon=${window.userLon}&format=json`);
+            let data = await r.json();
+            let addr = data.address || {};
+            let village = addr.village || addr.town || addr.suburb || addr.city || addr.county || "";
+            let pincode = addr.postcode || "";
+            
+            // Only fill village and pincode if fields are currently empty
+            let vField = document.getElementById('svillage');
+            let pField = document.getElementById('spin');
+            if (vField && !vField.value.trim()) vField.value = village;
+            if (pField && !pField.value.trim()) pField.value = pincode;
+            
+            btn.innerHTML = t("gps_captured");
+        } catch (e) {
+            btn.innerHTML = t("gps_captured");
+        }
+    }, async (err) => {
+        // Fallback: If user doesn't give GPS permission, take village name and search for it!
+        let v = (document.getElementById('svillage') ? document.getElementById('svillage').value : "").trim();
+        let pin = (document.getElementById('spin') ? document.getElementById('spin').value : "").trim();
+        if (v) {
+            let found = await searchVillageLocation(v, pin, btn);
+            if (found) return;
+        }
+        alert(t("gps_denied_village_search"));
+        btn.innerHTML = oldText;
+    }, { timeout: 8000 });
+}
+
+var SYMPTOMS = {{ symptoms|tojson }};
+var gramvetState = { currentUser: null, animals: [], current: "dashboard" };
+var animals = [];
+var current = "dashboard";
+
+function esc(x){return String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+async function api(url,opt={}){let r=await fetch(url,{headers:{"Content-Type":"application/json"},...opt});let j=await r.json().catch(()=>({}));if(!r.ok)throw Error(j.error||"Request failed");return j}
+function closeModal(){modal.classList.add("hidden")}
+function roleLabel(){
+  if(!gramvetState.currentUser) return "";
+  let r = gramvetState.currentUser.role;
+  return r==="farmer"?t("role_farmer"):r==="vet"?t("role_vet"):t("role_gov");
+}
+
+function authMode(type){
+  currentAuthMode = type;
+  loginSwitch.classList.toggle("active",type==="login");signupSwitch.classList.toggle("active",type!=="login");
+  if(type==="login"){authBody.innerHTML=`
+    <label class="field"><span class="label">${t("phone")}</span><input id="phone" inputmode="tel" placeholder="ex:909xxxxxx7"></label>
+    <label class="field"><span class="label">${t("password")}</span><input id="password" type="password"><div class="muted2" style="font-size:12px;margin-top:2px">${t("m_pass_hint")}</div></label>
+    <button class="btn" style="width:100%;margin-top:9px" onclick="login()">${t("signin")}</button>
+    <div class="notice" style="margin-top:14px">
+      <b>${t("demo_accounts")}</b><br>
+      🏛️ ${t("role_gov")}: <code>9000000001</code> | pass: <code>12345</code><br>
+      🩺 ${t("role_vet")}: <code>9000000002</code> | pass: <code>12345</code><br>
+      👨‍🌾 ${t("role_farmer")}: <code>9000000003</code> | pass: <code>12345</code>
+    </div>`;
+  }else{authBody.innerHTML=`
+    <div class="formgrid">
+      <label class="field full"><span class="label">${t("account_type")}</span><select id="srole" onchange="roleFields()">
+        <option value="farmer">${t("role_farmer")}</option><option value="vet">${t("role_vet")}</option><option value="government">${t("role_gov")}</option>
+      </select></label>
+      <label class="field"><span class="label">${t("full_name")}</span><input id="sname"></label>
+      <label class="field"><span class="label">${t("phone")}</span><input id="sphone" inputmode="tel" placeholder="ex: 909xxxxxx7"></label>
+      <label class="field"><span class="label">${t("password")}</span><input id="spass" type="password"><div class="muted2" style="font-size:12px;margin-top:2px">${t("m_pass_hint")}</div></label>
+      <button type="button" class="btn secondary" style="width:100%; margin:10px 0;" onclick="fetchGPS(this)">${t("gps_btn")}</button>
+      <label class="field"><span class="label">${t("pincode")}</span><input id="spin" placeholder="506001"></label>
+      <div id="farmerFields" class="full"><div class="formgrid">
+        <label class="field"><span class="label">${t("village")}</span><input id="svillage" placeholder="${t("village")}"></label>
+        <label class="field"><span class="label">${t("ward")}</span><input id="sward"></label>
+        <label class="field full"><span class="label">${t("address")}</span><input id="saddress"></label>
+      </div></div>
+      <div id="vetFields" class="full hidden"><div class="formgrid">
+        <label class="field"><span class="label">${t("vet_auth_id")}</span><input id="sauth"></label>
+        <label class="field"><span class="label">${t("office_address")}</span><input id="saddress2"></label>
+      </div></div>
+      <div id="govFields" class="full hidden"><label class="field"><span class="label">${t("gov_auth_code")}</span><input id="sgauth"></label></div>
+    </div>
+    <button class="btn" style="width:100%;margin-top:10px" onclick="signup()">${t("create_account_btn")}</button>
+    <div class="muted2" style="margin-top:10px">Demo government code: GOV-26128</div>`;
+  }
+}
+
+function roleFields(){
+  let r=srole.value;
+  farmerFields.classList.toggle("hidden",r!=="farmer");vetFields.classList.toggle("hidden",r!=="vet");govFields.classList.toggle("hidden",r!=="government");
+}
+
+async function login(){
+  let phoneClean = validatePhone(phone.value);
+  if(!phoneClean) return alert(t("err_phone"));
+  if(!password.value || password.value.length < 4) return alert(t("err_pass"));
+  try{
+    let j=await api("/api/login",{method:"POST",body:JSON.stringify({phone:phoneClean,password:password.value})});
+    gramvetState.currentUser = j.user;
+    openApp();
+  }catch(e){alert(e.message)}
+}
+
+async function signup(){
+  let phoneClean = validatePhone(sphone.value);
+  if(!phoneClean) return alert(t("err_phone"));
+  if(!spass.value || spass.value.length < 4) return alert(t("err_pass"));
+  let r=srole.value;
+  
+  // If user didn't grant GPS, automatically search for the village name entered
+  if (!window.userLat && r === "farmer" && svillage.value.trim()) {
+    await searchVillageLocation(svillage.value.trim(), spin.value.trim(), null);
+  }
+
+  let d={
+      name:sname.value, phone:phoneClean, password:spass.value, role:r, pincode:spin.value,
+      latitude: window.userLat,
+      longitude: window.userLon 
+  };
+  if(r==="farmer")Object.assign(d,{village:svillage.value.trim(),ward:sward.value,address:saddress.value});
+  if(r==="vet")Object.assign(d,{vet_auth_id:sauth.value,address:saddress2.value});
+  if(r==="government")Object.assign(d,{govt_auth_id:sgauth.value});
+  try{
+    let j=await api("/api/signup",{method:"POST",body:JSON.stringify(d)});
+    gramvetState.currentUser = j.user;
+    openApp();
+  }catch(e){alert(e.message)}
+}
+
+function openApp(){
+  auth.classList.add("hidden");app.classList.remove("hidden");role.textContent=roleLabel();
+  if (gramvetState.currentUser.role !== "farmer") {
+    currentLang = "en";
+    localStorage.setItem("gramvet_lang", "en");
+    langApp.style.display = "none";
+    if(langApp.previousElementSibling) langApp.previousElementSibling.style.display = "none";
+  } else {
+    langApp.value = currentLang;
+    langApp.style.display = "inline-block";
+    if(langApp.previousElementSibling) langApp.previousElementSibling.style.display = "inline";
+  }
+  updateStaticTexts();
+  // Navigation is permission-based. Server-side endpoints enforce the same permissions.
+  document.querySelector('[data-p="dashboard"]').classList.toggle("hidden",gramvetState.currentUser.role==="government");
+  document.querySelector('[data-p="farmers"]').classList.toggle("hidden",gramvetState.currentUser.role==="farmer");
+  document.querySelector('[data-p="outbreak"]').classList.toggle("hidden",gramvetState.currentUser.role==="farmer");
+  document.querySelector('[data-p="govt"]').classList.toggle("hidden",gramvetState.currentUser.role!=="government");
+  go(gramvetState.currentUser.role==="government" ? "govt" : "dashboard");
+  refreshNotifications();
+}
+async function logout(){await api("/api/logout",{method:"POST"});location.reload()}
+function go(p){
+  current=p;document.querySelectorAll(".nav").forEach(x=>x.classList.toggle("active",x.dataset.p===p));
+  if(p==="dashboard")dashboard();if(p==="livestock")livestock();if(p==="health")health();if(p==="notifications")notifications();
+  if(p==="farmers")farmers();if(p==="outbreak")outbreak();if(p==="govt")govt();
+}
+function renderTop(title,sub){return `<h1>${esc(title)}</h1><p class="subtitle">${esc(sub)}</p>`}
+async function dashboard(){
+  if(gramvetState.currentUser.role==="government")return govt();
+  await loadAnimals();let cases=(await api("/api/cases")).cases;
+  let open=cases.filter(x=>x.status!=="CLOSED").length, closed=cases.filter(x=>x.status==="CLOSED").length;
+  let firstName = (gramvetState.currentUser.name || "").split(" ")[0] || "";
+  main.innerHTML=renderTop(`${t("welcome")} ${firstName}`,
+    gramvetState.currentUser.role==="farmer"?t("farmer_dash_sub"):t("vet_dash_sub"));
+  if(gramvetState.currentUser.role==="farmer"){
+    main.innerHTML+=`<div class="grid four">
+      <div class="card stat"><div><div class="eyebrow">${t("my_livestock")}</div><div class="big">${animals.length}</div></div><div class="stat-icon">🐄</div></div>
+      <div class="card stat"><div><div class="eyebrow">${t("open_cases")}</div><div class="big">${open}</div></div><div class="stat-icon">🩺</div></div>
+      <div class="card stat"><div><div class="eyebrow">${t("closed_history")}</div><div class="big">${closed}</div></div><div class="stat-icon">📚</div></div>
+      <div class="card stat"><div><div class="eyebrow">${t("my_village")}</div><div class="big">${esc(gramvetState.currentUser.village||"—")}</div></div><div class="stat-icon">📍</div></div>
+    </div>
+    <div class="grid two" style="margin-top:18px">
+      <div class="card"><div class="toolbar"><h3>${t("my_livestock")}</h3><button class="btn" onclick="animalModal()">${t("add_livestock")}</button></div>${animals.slice(0,7).map(farmerAnimalRow).join("")||`<p class="muted">No livestock registered yet.</p>`}</div>
+      <div class="card"><h3>${t("recent_cases")}</h3>${cases.slice(0,7).map(caseMini).join("")||`<p class="muted">No cases yet.</p>`}</div>
+    </div>`;
+  }else{
+    let openCases=cases.filter(x=>x.status!=="CLOSED");
+    let j=await api("/api/vet/overview");
+    main.innerHTML+=`<div class="grid four">
+      <div class="card stat"><div><div class="eyebrow">${t("assigned_livestock")}</div><div class="big">${animals.length}</div></div><div class="stat-icon">🐄</div></div>
+      <div class="card stat"><div><div class="eyebrow">${t("vaccination_cov")}</div><div class="big">${j.vaccination_pct}%</div></div><div class="stat-icon">💉</div></div>
+      <div class="card stat"><div><div class="eyebrow">${t("resources")}</div><div class="big">${j.resources_left}</div><div class="muted">of ${j.resources_sent} total</div></div><div class="stat-icon">📦</div></div>
+      <div class="card stat"><div><div class="eyebrow">${t("high_priority")}</div><div class="big">${openCases.filter(c=>caseRisk(c)>=0.7).length}</div></div><div class="stat-icon">🔴</div></div>
+    </div>
+    <div class="grid two" style="margin-top:18px">
+      <div class="card"><div class="toolbar"><h3>${t("priority_cases")}</h3><button class="btn secondary" onclick="go('health')">${t("all_cases")}</button></div>${openCases.sort((a,b)=>caseRisk(b)-caseRisk(a)).slice(0,8).map(vetCaseRow).join("")||`<p class="muted">No active cases.</p>`}</div>
+      <div class="card"><h3>${t("lookup_title")}</h3><p class="muted">Find cattle or buffalo by animal name, ID or owner's name.</p><input id="dashSearch" placeholder="${t("search_placeholder")}" oninput="debouncedVetSearch()"><div id="dashResults" style="margin-top:12px"></div></div>
+    </div>
+    <div class="card" style="margin-top:18px"><div class="toolbar"><h3>My resource requests</h3></div>
+    <div class="tablewrap"><table><thead><tr><th>Village</th><th>Resources</th><th>Status</th><th>Action</th></tr></thead><tbody>
+    ${(j.requests||[]).map(r=>`<tr><td>${esc(r.village_name)}</td><td>${esc(r.resources.map(x=>`${x.name}: ${x.quantity} ${x.unit||""}`).join(" · "))}</td><td><span class="pill">${esc(r.status)}</span></td><td>${r.status==="DISPATCHED"?`<button class="btn" onclick="vetDeliverResource(${r.id})">Mark Delivered</button>`:""}</td></tr>`).join("")||"<tr><td colspan='4'>No requests.</td></tr>"}
+    </tbody></table></div></div>`;
+  }
+}
+function caseMini(c){return `<div class="animal-line" onclick="showCase(${c.id})" style="cursor:pointer"><div class="animal-icon">${c.species==="Buffalo"?"🐃":"🐄"}</div><div style="flex:1"><b>#${c.id} · ${esc(c.animal_name)}</b><div class="muted">${esc(c.village_name)} · ${esc(c.opened_at.replace("T"," ").slice(0,16))}</div></div><span class="pill ${c.status==="CLOSED"?"":"warn"}">${esc(c.status)}</span></div>`}
+function farmerAnimalRow(a){return `<div class="animal-line"><div class="animal-icon">${a.species==="Buffalo"?"🐃":"🐄"}</div><div style="flex:1"><b>${esc(a.name)}</b><div class="muted">${esc(a.tag)} · ${esc(a.species)} · ${esc(a.sex||"Female")} · created ${esc((a.created_at||"").replace("T"," ").slice(0,16))}</div></div><button class="btn secondary" onclick="showAnimalHistory(${a.id})">${t("full_history")}</button><button class="btn" onclick="reportModal(${a.id})">${t("report_issue")}</button></div>`}
+function vetCaseRow(c){return `<div class="animal-line" onclick="showCase(${c.id})" style="cursor:pointer"><div class="animal-icon">${c.species==="Buffalo"?"🐃":"🐄"}</div><div style="flex:1"><b>#${c.id} · ${esc(c.animal_name)}</b><div class="muted">${esc(c.farmer_name)} · ${esc(c.village_name)} · ${esc(c.opened_at.replace("T"," ").slice(0,16))}</div></div><span class="pill ${caseRisk(c)>=.7?"bad":caseRisk(c)>=.4?"warn":"info"}">${Math.round(caseRisk(c)*100)}% risk</span></div>`}
+function caseRisk(c){let r=c.reports?.[c.reports.length-1]?.prediction?.predictions?.[0]?.probability;return typeof r==="number"?r:0}
+async function loadAnimals(){animals=(await api("/api/animals")).animals}
+async function livestock(){
+  await loadAnimals();main.innerHTML=renderTop(gramvetState.currentUser.role==="farmer"?"My livestock":gramvetState.currentUser.role==="vet"?"Assigned livestock":"All livestock",
+    gramvetState.currentUser.role==="farmer"?"Every animal keeps its own permanent ID and history.":"Only livestock within your permitted scope is shown.");
+  let controls=gramvetState.currentUser.role==="farmer"?`<button class="btn" onclick="animalModal()">${t("add_livestock")}</button>`:"";
+  main.innerHTML+=`<div class="card"><div class="toolbar"><h3>${animals.length} animals</h3>${controls}</div>
+  <div class="tablewrap"><table><thead><tr><th>${t("tbl_id")}</th><th>${t("tbl_owner")}</th><th>${t("tbl_village")}</th><th>${t("tbl_vacc")}</th><th>${t("tbl_latest")}</th><th>${t("tbl_vet")}</th><th></th></tr></thead>
+  <tbody>${animals.map(a=>`<tr><td><b>${esc(a.tag)}</b><div>${esc(a.name)} · ${esc(a.species)}</div><div class="muted2">Created ${esc((a.created_at||"").replace("T"," ").slice(0,16))}</div></td>
+  <td>${esc(a.farmer_name)}</td><td>${esc(a.village_name)}<br>${esc(a.ward)}</td><td>${esc(a.last_vaccinated||"—")}</td>
+  <td>${a.latest?`<span class="pill ${a.latest.prediction?"warn":""}">${esc(a.latest.symptoms.join(", "))}</span><div class="muted2">${esc(a.latest.reported_at.replace("T"," ").slice(0,16))}</div>`:"None"}</td>
+  <td>${a.assigned_vet?`${esc(a.assigned_vet.name)}<div class="muted2">${esc(a.assigned_vet.phone)}</div>`:"Not assigned"}</td>
+  <td><button class="btn secondary" onclick="showAnimalHistory(${a.id})">${t("full_history")}</button>${gramvetState.currentUser.role==="farmer"?` <button class="btn secondary" onclick="editAnimalModal(${a.id})">Edit</button> <button class="btn" onclick="reportModal(${a.id})">${t("report_issue")}</button>`:""}</td></tr>`).join("")}</tbody></table></div></div>`;
+}
+function animalModal(editId){
+  let a=editId?animals.find(x=>x.id===editId):null;
+  modalBody.innerHTML=`<h2>${a?t("m_edit_livestock"):t("m_add_livestock")}</h2><p class="muted">${a?"The livestock ID/tag is permanent. Use Health / Cases to add a new issue; old reports are never overwritten.":t("m_add_livestock_sub")}</p>
+  <div class="formgrid">${a?`<label class="field"><span class="label">${t("m_assigned_id_locked")}</span><input value="${esc(a.tag)}" disabled></label>`:`<label class="field"><span class="label">${t("m_assigned_id")}</span><input id="atag" placeholder="GV-1001"></label>`}
+  <label class="field"><span class="label">${t("m_animal_name")}</span><input id="aname" value="${esc(a?.name||"")}"></label>
+  <label class="field"><span class="label">${t("m_species")}</span><select id="asp"><option ${a?.species==="Cattle"?"selected":""}>Cattle / Cow</option><option ${a?.species==="Buffalo"?"selected":""}>Buffalo</option></select></label>
+  <label class="field"><span class="label">${t("m_sex")}</span><select id="asex"><option ${a?.sex==="Female"||!a?.sex?"selected":""}>Female</option><option ${a?.sex==="Male"?"selected":""}>Male</option></select></label>
+  <label class="field"><span class="label">${t("m_breed")}</span><input id="abr" value="${esc(a?.breed||"")}"></label>
+  <label class="field"><span class="label">${t("m_age")}</span><input id="aage" value="${esc(a?.age||"")}"></label>
+  <label class="field"><span class="label">${t("village")}</span><input id="avi" value="${esc(a?.village_name||gramvetState.currentUser.village||"")}" ${a?"disabled":""}></label>
+  <label class="field"><span class="label">${t("ward")}</span><input id="awa" value="${esc(a?.ward||gramvetState.currentUser.ward||"")}"></label>
+  <label class="field"><span class="label">${t("pincode")}</span><input id="apin" value="${esc(gramvetState.currentUser.pincode||"")}" ${a?"disabled":""}></label>
+  <label class="field"><span class="label">${t("m_last_vacc_date")}</span><input id="avacc" type="date" value="${esc(a?.last_vaccinated||"")}"></label></div>
+  <button class="btn" onclick="${a?`saveAnimalEdit(${a.id})`:`saveAnimal()`}">${a?t("m_save_changes"):t("m_add_livestock")}</button>`;
+  modal.classList.remove("hidden");
+}
+function editAnimalModal(id){animalModal(id)}
+async function saveAnimal(){
+  let species=asp.value.startsWith("Cattle")?"Cattle":"Buffalo";
+  try{let j=await api("/api/animals",{method:"POST",body:JSON.stringify({tag:atag.value,name:aname.value,species,sex:asex.value,breed:abr.value,age:aage.value,village:avi.value,ward:awa.value,pincode:apin.value,last_vaccinated:avacc.value})});closeModal();go("livestock")}catch(e){alert(e.message)}
+}
+async function saveAnimalEdit(id){
+  let species=asp.value.startsWith("Cattle")?"Cattle":"Buffalo";
+  try{await api("/api/animals/"+id,{method:"PUT",body:JSON.stringify({name:aname.value,species,sex:asex.value,breed:abr.value,age:aage.value,ward:awa.value,last_vaccinated:avacc.value})});closeModal();go("livestock")}catch(e){alert(e.message)}
+}
+
+var SYMPTOM_LABELS = {
+  "Fever": { hi: "बुखार", mr: "ताप" },
+  "Cough": { hi: "खांसी", mr: "खोकला" },
+  "Nasal discharge": { hi: "नाक बहना", mr: "नाकातून स्राव" },
+  "Difficulty breathing": { hi: "सांस लेने में कठिनाई", mr: "श्वास घेण्यास त्रास" },
+  "Reduced appetite": { hi: "भूख में कमी", mr: "भूक मंदावणे" },
+  "Weakness / lethargy": { hi: "कमजोरी / सुस्ती", mr: "कमकुवतपणा / सुस्ती" },
+  "Diarrhoea": { hi: "दस्त", mr: "हगवण / जुलाब" },
+  "Vomiting": { hi: "उल्टी", mr: "उलटी" },
+  "Dehydration": { hi: "पानी की कमी (डिहाइड्रेशन)", mr: "पाण्याची कमतरता" },
+  "Excessive salivation": { hi: "मुंह से अधिक लार बहना", mr: "तोंडातून लाळ गळणे" },
+  "Mouth lesions / sores": { hi: "मुंह में छाले / घाव", mr: "तोंडात फोड / व्रण" },
+  "Lameness / difficulty walking": { hi: "लंगड़ापन / चलने में दिक्कत", mr: "लंगडणे / चालण्यास त्रास" },
+  "Swelling": { hi: "सूजन", mr: "सूज" },
+  "Skin lesions / rash": { hi: "त्वचा पर चकत्ते / दाने", mr: "त्वचेवर चट्टे / पुरळ" },
+  "Eye discharge / redness": { hi: "आंखों से स्राव / लाली", mr: "डोळ्यांतून पाणी / लालसरपणा" },
+  "Abnormal milk production": { hi: "दूध उत्पादन में विकृति", mr: "दुधात घट किंवा विकृती" },
+  "Abortion / reproductive problem": { hi: "गर्भपात / प्रजनन समस्या", mr: "गर्भपात / पुनरुत्पादन समस्या" },
+  "Weight loss": { hi: "वजन कम होना", mr: "वजन कमी होणे" },
+  "High body temperature": { hi: "तेज़ शरीर का तापमान", mr: "शरीराचे जास्त तापमान" },
+  "Ticks / external parasites": { hi: "चीचड़ / बाहरी परजीवी", mr: "गोचीड / बाह्य कीटक" }
+};
+
+function symptomLabel(s) {
+  if (currentLang === "hi" && SYMPTOM_LABELS[s]?.hi) return SYMPTOM_LABELS[s].hi;
+  if (currentLang === "mr" && SYMPTOM_LABELS[s]?.mr) return SYMPTOM_LABELS[s].mr;
+  return s;
+}
+
+function diseaseLabel(d) {
+  if (!d) return "—";
+  if (d.includes("Foot_and_Mouth_Disease") || d.includes("FMD")) return t("d_fmd", d);
+  if (d.includes("Lumpy_Skin_Disease")) return t("d_lsd", d);
+  if (d.includes("Hemorrhagic_Septicemia")) return t("d_hs", d);
+  if (d.includes("Black_Quarter")) return t("d_bq", d);
+  if (d.includes("Mastitis")) return t("d_mastitis", d);
+  return d;
+}
+
+function statusLabel(s) {
+  if (!s) return "—";
+  return t("t_" + s.toLowerCase(), s);
+}
+
+function symptomGrid(selected=[]){
+  return `<div class="symgrid">${SYMPTOMS.map(s=>`<label class="sym"><input class="symcheck" type="checkbox" value="${esc(s)}" ${selected.includes(s)?"checked":""}> ${esc(symptomLabel(s))}</label>`).join("")}</div>`;
+}
+
+function weatherCardHTML(wx,aid,loading){
+  if(loading) return `<div class="notice blue" style="margin:12px 0">⏳ ${t("m_detecting")}</div>`;
+  if(!wx) return "";
+  if(wx.available===false){
+    return `<div class="notice amber" style="margin:12px 0"><b>⚠️ Live weather unavailable</b><br>${esc(wx.error||"Could not fetch live weather.")} ${t("m_season")}: <b>${esc(wx.season||"—")}</b>. You can still submit the report.${aid?` <button type="button" class="btn ghost" style="padding:3px 8px" onclick="loadReportWeather(${aid})">🔄 ${t("m_refresh")}</button>`:""}</div>`;
+  }
+  let srcLabel={gps:t("m_wx_gps"),animal_record:t("m_wx_animal"),village_record:t("m_wx_village")}[wx.location_source]||t("m_wx_avail");
+  return `<div class="card" style="background:#fbfdfb;margin:12px 0"><div class="toolbar"><h3>📍 ${t("m_live_wx")} · ${esc(srcLabel)}</h3>${aid?`<button type="button" class="btn ghost" style="padding:4px 8px" onclick="loadReportWeather(${aid})">🔄 ${t("m_refresh")}</button>`:""}</div>
+    <div class="grid four">
+      <div class="stat"><div><div class="eyebrow">${t("m_temp")}</div><div class="big">${wx.temperature_c??"—"}°C</div></div><div class="stat-icon">🌡️</div></div>
+      <div class="stat"><div><div class="eyebrow">${t("m_hum")}</div><div class="big">${wx.humidity_pct??"—"}%</div></div><div class="stat-icon">💧</div></div>
+      <div class="stat"><div><div class="eyebrow">${t("m_rain")}</div><div class="big">${wx.rainfall_mm??"—"}mm</div></div><div class="stat-icon">🌧️</div></div>
+      <div class="stat"><div><div class="eyebrow">${t("m_season")}</div><div class="big" style="font-size:17px">${esc(wx.season||"—")}</div></div><div class="stat-icon">🍂</div></div>
+    </div>
+    <div class="muted2" style="margin-top:8px">${t("m_wx_desc")}</div>
+  </div>`;
+}
+async function loadReportWeather(aid){
+  let box=document.getElementById("reportWeather");
+  if(box) box.innerHTML=weatherCardHTML(null,aid,true);
+  let afterCoords=async (lat,lon)=>{
+    window.reportLat=lat; window.reportLon=lon;
+    let q=(lat!=null&&lon!=null)?`lat=${lat}&lon=${lon}`:`animal_id=${aid}`;
+    try{let j=await api("/api/weather?"+q); if(box) box.innerHTML=weatherCardHTML(j.weather,aid,false);}
+    catch(e){ if(box) box.innerHTML=`<div class="notice amber" style="margin:12px 0">⚠️ ${esc(e.message)} ${aid?`<button type="button" class="btn ghost" style="padding:3px 8px" onclick="loadReportWeather(${aid})">🔄 ${t("m_refresh")}</button>`:""}</div>`; }
+  };
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(
+      pos=>afterCoords(pos.coords.latitude,pos.coords.longitude),
+      ()=>afterCoords(null,null),
+      {timeout:8000,maximumAge:60000}
+    );
+  } else afterCoords(null,null);
+}
+function reportModal(aid){
+  let a=animals.find(x=>x.id===aid);
+  window.reportLat=null; window.reportLon=null; window._reportBusy=false;
+  modalBody.innerHTML=`<h2>${t("m_report")} · ${esc(a.name)} <span class="pill">${esc(a.tag)}</span></h2>
+  <p class="muted">${t("m_report_desc")}</p>
+  <div id="reportWeather"></div>
+  <div class="card" style="background:#fbfdfb;margin-bottom:12px"><div class="toolbar"><h3>${t("m_farm_inputs")}</h3><span class="muted2">${t("m_sent_ml")}</span></div>
+    <div class="formgrid">
+      <label class="field"><span class="label">${t("m_herd_size")}</span><input id="reportHerdSize" type="number" min="1" step="1" value="1"></label>
+      <label class="field"><span class="label">${t("m_water_body")}</span><input id="reportWaterbody" type="number" min="0" step="0.1" value="1.2"></label>
+      <label class="field"><span class="label">${t("m_vacc_fmd")}</span><input id="reportVaccFmd" type="date"></label>
+      <label class="field"><span class="label">${t("m_vacc_hs")}</span><input id="reportVaccHs" type="date"></label>
+      <label class="field"><span class="label">${t("m_vacc_lsd")}</span><input id="reportVaccLsd" type="date"></label>
+      <label class="field"><span class="label">${t("m_vacc_bq")}</span><input id="reportVaccBq" type="date"></label>
+    </div>
+  </div>
+  <div class="card" style="background:#fbfdfb"><div class="toolbar"><h3>${t("symptoms", "Symptoms")}</h3><span class="muted2">Select all observed</span></div>${symptomGrid()}</div>
+  <label class="field"><span class="label">${t("m_notes_opt")}</span><textarea id="reportNotes"></textarea></label>
+  <button class="btn" onclick="submitReport(${aid})">${t("save_report")}</button>`;
+  modal.classList.remove("hidden");
+  loadReportWeather(aid);
+}
+async function submitReport(aid){
+  let symptoms=[...document.querySelectorAll(".symcheck:checked")].map(x=>x.value);
+  if(!symptoms.length)return alert(t("select_symptom"));
+  let reportInputs={
+    herd_size:Number(reportHerdSize.value||1),
+    dist_waterbody_km:Number(reportWaterbody.value||1.2),
+    vaccinated_fmd_date:reportVaccFmd.value,
+    vaccinated_hs_date:reportVaccHs.value,
+    vaccinated_lsd_date:reportVaccLsd.value,
+    vaccinated_bq_date:reportVaccBq.value
+  };
+  if(window._reportBusy)return;
+  window._reportBusy=true;
+  let btn=[...modalBody.querySelectorAll("button")].find(b=>/Save report|सहेजें|जतन/i.test(b.textContent));
+  if(btn){btn.disabled=true;btn.textContent=t("running_model");}
+
+  // Ensure live GPS is captured if available
+  if(navigator.geolocation && (window.reportLat == null || window.reportLon == null)) {
+    try {
+      let pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, {timeout: 4000, maximumAge: 60000}));
+      window.reportLat = pos.coords.latitude;
+      window.reportLon = pos.coords.longitude;
+    } catch(err) {
+      console.warn("Live GPS unavailable for report:", err);
+    }
+  }
+
+  try{
+    let j=await api("/api/cases/report",{method:"POST",body:JSON.stringify({animal_id:aid,symptoms,notes:reportNotes.value,latitude:window.reportLat,longitude:window.reportLon,...reportInputs})});
+    showPredictionResult(j);
+  }catch(e){
+    window._reportBusy=false;
+    if(btn){btn.disabled=false;btn.textContent=t("save_report");}
+    alert(e.message);
+  }
+}
+function showPredictionResult(j){
+  window._reportBusy=false;
+  let role=gramvetState.currentUser?.role||"farmer";
+  let p=j.prediction||{},preds=p.predictions||[],vet=j.assigned_vet,wx=j.weather,inputs=p.input_summary||{};
+  let vaccineMonths=inputs.vaccine_months||{};
+  let triage=p.triage_risk||p.Triage_Risk_Level||"—";
+  let escProb=p.escalation_probability;
+  let outProb=p.outbreak_probability; if(outProb==null) outProb=escProb;
+  let outStatus=p.outbreak_status||"—";
+  let modelErr=(!p.connected && (p.error||p.message)) ? (p.error||p.message) : null;
+  let cards="";
+  if(role==="farmer"){
+    cards=`<div class="grid four" style="margin-top:14px">
+      <div class="card stat"><div><div class="eyebrow">Top disease signal</div><div class="big" style="font-size:22px">${esc(preds[0]?.disease||"—")}</div><div class="muted">${typeof preds[0]?.probability==="number"?Math.round(preds[0].probability*100)+"% model confidence":"—"}</div></div><div class="stat-icon">🧠</div></div>
+      <div class="card stat"><div><div class="eyebrow">Triage risk</div><div class="big" style="font-size:22px">${esc(triage)}</div></div><div class="stat-icon">🚦</div></div>
+      <div class="card stat"><div><div class="eyebrow">Outbreak risk</div><div class="big" style="font-size:22px">${typeof outProb==="number"?Math.round(outProb*100)+"%":"—"}</div><div class="muted">${esc(outStatus)}</div></div><div class="stat-icon">🚨</div></div>
+      <div class="card stat"><div><div class="eyebrow">Escalation risk</div><div class="big" style="font-size:22px">${typeof escProb==="number"?Math.round(escProb*100)+"%":"—"}</div></div><div class="stat-icon">⚠️</div></div>
+    </div>`;
+  }else if(role==="vet"){
+    cards=`<div class="grid three" style="margin-top:14px">
+      <div class="card stat"><div><div class="eyebrow">Top disease signal</div><div class="big" style="font-size:22px">${esc(preds[0]?.disease||"—")}</div><div class="muted">${typeof preds[0]?.probability==="number"?Math.round(preds[0].probability*100)+"%":"—"}</div></div><div class="stat-icon">🧠</div></div>
+      <div class="card stat"><div><div class="eyebrow">Outbreak risk</div><div class="big" style="font-size:22px">${typeof outProb==="number"?Math.round(outProb*100)+"%":"—"}</div><div class="muted">${esc(outStatus)}</div></div><div class="stat-icon">🚨</div></div>
+      <div class="card stat"><div><div class="eyebrow">Vet response</div><div class="big" style="font-size:19px">${vet?"Assigned":"Pending"}</div><div class="muted">${vet?esc(vet.name):"No vet mapped"}</div></div><div class="stat-icon">🩺</div></div>
+    </div>`;
+  }else{
+    cards=`<div class="grid two" style="margin-top:14px">
+      <div class="card stat"><div><div class="eyebrow">Outbreak risk</div><div class="big" style="font-size:22px">${typeof outProb==="number"?Math.round(outProb*100)+"%":"—"}</div><div class="muted">${esc(outStatus)}</div></div><div class="stat-icon">🚨</div></div>
+      <div class="card stat"><div><div class="eyebrow">Village cases</div><div class="big" style="font-size:19px">Case #${esc(String(j.case_id||"—"))}</div><div class="muted">Surveillance signal only</div></div><div class="stat-icon">🏛️</div></div>
+    </div>`;
+  }
+  modalBody.innerHTML=`<h2>GramVet AI health report</h2>
+    <div class="notice blue"><b>Report saved permanently.</b> Case #${esc(String(j.case_id))} is now open for veterinary review. The AI is decision support; it does not replace the veterinarian.${modelErr?`<br><b>Model error:</b> ${esc(modelErr)}${p.detail?` — ${esc(String(p.detail).slice(0,180))}`:""}`:""}</div>
+    ${cards}
+    ${wx?weatherCardHTML(wx,null,false):""}
+    <div class="grid two" style="margin-top:14px">
+      <div class="card"><h3>Observed symptoms</h3><p>${esc((j.symptoms||[]).join(" · ")||"No symptoms")}</p>${role!=="government"?`<h3 style="margin-top:18px">Animal / model inputs</h3><div class="muted">Age: ${inputs.age_months??"—"} months · Sex: ${esc(inputs.sex||"—")} · Herd size: ${inputs.herd_size??"—"} · Water body: ${inputs.dist_waterbody_km??"—"} km · Recent treatment: ${esc(inputs.recent_treatment||"—")}</div>`:""}</div>
+      <div class="card"><h3>${role==="government"?"Outbreak context":"Vaccination signals"}</h3><div class="muted">${role==="government"?`Status <b>${esc(outStatus)}</b> · probability ${typeof outProb==="number"?Math.round(outProb*100)+"%":"—"}`:Object.entries(inputs.vaccinations||{}).map(([k,v])=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line)"><span>${esc(k.replaceAll("_"," "))}</span><b>${esc(String(v))}</b></div>`).join("")||"No vaccination history"}</div></div>
+    </div>
+    ${role!=="government"?`<div class="card" style="margin-top:14px"><h3>Vaccination age used by model</h3>${["FMD","HS","LSD","BQ"].map(k=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line)"><span>${k}</span><b>${vaccineMonths[k]==null?"No date":esc(String(vaccineMonths[k]))+" month(s)"}</b></div>`).join("")}</div>`:""}
+    ${role!=="government"&&preds.length?`<div class="card" style="margin-top:14px"><h3>Model result</h3>${preds.map(x=>`<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line)"><span>${esc(x.disease)}</span><b>${typeof x.probability==="number"?Math.round(x.probability*100)+"%":"—"}</b></div>`).join("")}</div>`:""}
+    ${vet?`<div class="card" style="margin-top:14px"><h3>Veterinarian notified</h3><b>${esc(vet.name)}</b><div class="muted">${esc(vet.phone)} · ${esc(vet.address||"Address not available")}</div><div style="margin-top:8px">The case remains OPEN until the veterinarian records treatment and a cure.</div></div>`:`<div class="notice red" style="margin-top:14px">No veterinarian is assigned to this village yet. The report is saved and visible in your history, but an assignment is required for clinical response.</div>`}
+    <div style="margin-top:14px;display:flex;gap:9px"><button class="btn" onclick="closeModal();go('health')">Open case history</button><button class="btn secondary" onclick="closeModal()">Done</button></div>`;
+}
+function showAnimalHistory(id){
+  api('/api/animals/'+id+'/history').then(j=>{let a=j.animal;modalBody.innerHTML=`<h2>${esc(a.name)} · ${esc(a.tag)}</h2><p class="muted">${t("m_perm_record")}</p><div class="grid four"><div class="card stat"><div><div class="eyebrow">${t("m_prev_cases")}</div><div class="big">${j.case_count}</div></div><div class="stat-icon">📚</div></div><div class="card stat"><div><div class="eyebrow">${t("m_times_cured")}</div><div class="big">${j.cured_count}</div></div><div class="stat-icon">✅</div></div><div class="card stat"><div><div class="eyebrow">${t("m_vaccinations")}</div><div class="big">${j.vaccinations.length}</div></div><div class="stat-icon">💉</div></div><div class="card stat"><div><div class="eyebrow">${t("m_owner")}</div><div class="big" style="font-size:17px">${esc(a.farmer_name||"—")}</div></div><div class="stat-icon">👨‍🌾</div></div></div><div class="card" style="margin-top:14px"><h3>${t("m_vacc_history")}</h3>${j.vaccinations.map(v=>`<div class="timeline-item"><b>${esc(v.vaccine_name)} · ${v.dose} ${esc(v.unit)}</b><div class="muted">${esc(v.administered_at.replace('T',' ').slice(0,16))} · by ${esc(v.vet_name)}</div>${v.batch_no?`<div class="muted2">Batch: ${esc(v.batch_no)}</div>`:''}${v.notes?`<div>${esc(v.notes)}</div>`:''}</div>`).join('')||`<p class="muted">${t("m_no_vacc")}</p>`}</div><div class="card" style="margin-top:14px"><h3>${t("m_prev_cases")}</h3>${j.cases.map(c=>`<div class="animal-line" onclick="showCase(${c.id})" style="cursor:pointer"><div style="flex:1"><b>Case #${c.id} · ${esc(c.status)}</b><div class="muted">Opened ${esc(c.opened_at.replace('T',' ').slice(0,16))}${c.closed_at?` · Closed ${esc(c.closed_at.replace('T',' ').slice(0,16))}`:''}</div><div class="muted2">${c.reports.length} report(s) · ${c.actions.length} clinical action(s)</div></div><span class="pill ${c.status==='CLOSED'?'':'warn'}">${esc(c.status)}</span></div>`).join('')||`<p class="muted">${t("m_no_cases")}</p>`}</div><div style="margin-top:14px"><button class="btn" onclick="closeModal()">Close</button></div>`;modal.classList.remove('hidden')}).catch(e=>alert(e.message));
+}
+
+async function health(){
+  let j=await api("/api/cases");let cases=j.cases;
+  main.innerHTML=renderTop(gramvetState.currentUser.role==="farmer"?"My health cases":"Assigned health cases",
+    gramvetState.currentUser.role==="farmer"?"Every report remains visible after closure.":"Search by animal, tag or farmer name.");
+  main.innerHTML+=`<div class="card"><div class="toolbar"><div style="display:flex;gap:8px;flex-wrap:wrap"><input id="caseSearch" class="search" placeholder="Search animal / owner" oninput="filterCases()"><select id="caseStatus" onchange="filterCases()"><option value="">All statuses</option><option>OPEN</option><option>IN_PROGRESS</option><option>CLOSED</option></select></div>${gramvetState.currentUser.role==="farmer"?`<button class="btn" onclick="go('livestock')">Report from livestock</button>`:""}</div><div id="caseTable"></div></div>`;
+  window._cases=cases;renderCases(cases);
+}
+function filterCases(){let q=(caseSearch.value||"").toLowerCase(),s=caseStatus.value;renderCases((_cases||[]).filter(c=>(!q||[c.animal_name,c.animal_tag,c.farmer_name].join(" ").toLowerCase().includes(q))&&(!s||c.status===s)))}
+function renderCases(cases){caseTable.innerHTML=`<div class="tablewrap"><table><thead><tr><th>${t("tbl_case")}</th><th>${t("tbl_id")}</th><th>${t("tbl_owner")}</th><th>${t("tbl_village")}</th><th>${t("tbl_opened")}</th><th>${t("tbl_status")}</th><th></th></tr></thead><tbody>${cases.map(c=>`<tr><td><b>#${c.id}</b></td><td>${esc(c.animal_name)}<div class="muted2">${esc(c.animal_tag)} · ${esc(c.species)}</div></td><td>${esc(c.farmer_name)}<div class="muted2">${esc(c.farmer_phone)}</div></td><td>${esc(c.village_name)}</td><td>${esc(c.opened_at.replace("T"," ").slice(0,16))}</td><td><span class="pill ${c.status==="CLOSED"?"":"warn"}">${c.status}</span></td><td><button class="btn secondary" onclick="showCase(${c.id})">${t("full_history")}</button></td></tr>`).join("")||`<tr><td colspan="7" class="muted">No cases.</td></tr>`}</tbody></table></div>`}
+async function showCase(id){
+  try{let j=await api("/api/cases/"+id);let c=j.case; window.currentOpenCase=c; let role=gramvetState.currentUser?.role||"farmer";
+    let lastPred=c.reports?.[c.reports.length-1]?.prediction||{};
+    let outProb=lastPred.outbreak_probability; if(outProb==null) outProb=lastPred.escalation_probability;
+    let riskBanner="";
+    if(role==="farmer"){
+      riskBanner=`<div class="grid three" style="margin-top:14px">
+        <div class="card"><div class="eyebrow">${t("m_disease")}</div><b>${esc(diseaseLabel(lastPred.predictions?.[0]?.disease))}</b></div>
+        <div class="card"><div class="eyebrow">${t("m_triage")}</div><b>${esc(statusLabel(lastPred.triage_risk||lastPred.Triage_Risk_Level))}</b></div>
+        <div class="card"><div class="eyebrow">${t("m_outbreak")}</div><b>${typeof outProb==="number"?Math.round(outProb*100)+"%":"—"}</b> · ${esc(statusLabel(lastPred.outbreak_status))}</div>
+      </div>`;
+    }else if(role==="vet"){
+      riskBanner=`<div class="grid two" style="margin-top:14px">
+        <div class="card"><div class="eyebrow">Disease</div><b>${esc(diseaseLabel(lastPred.predictions?.[0]?.disease))}</b><div class="muted">${typeof lastPred.predictions?.[0]?.probability==="number"?Math.round(lastPred.predictions[0].probability*100)+"%":""}</div></div>
+        <div class="card"><div class="eyebrow">Outbreak risk</div><b>${typeof outProb==="number"?Math.round(outProb*100)+"%":"—"}</b> · ${esc(statusLabel(lastPred.outbreak_status))}</div>
+      </div>`;
+    }else{
+      riskBanner=`<div class="card" style="margin-top:14px"><div class="eyebrow">Outbreak risk</div><b style="font-size:22px">${typeof outProb==="number"?Math.round(outProb*100)+"%":"—"}</b> · ${esc(statusLabel(lastPred.outbreak_status))}</div>`;
+    }
+    modalBody.innerHTML=`<h2>Case #${c.id} · ${esc(c.animal_name)}</h2>
+      <div class="grid three"><div class="card"><div class="eyebrow">${t("m_animal")}</div><b>${esc(c.animal_tag)}</b><div class="muted">${esc(c.species)}</div></div>
+      <div class="card"><div class="eyebrow">${t("m_owner")}</div><b>${esc(c.farmer_name)}</b><div class="muted">${esc(c.farmer_phone)}</div></div>
+      <div class="card"><div class="eyebrow">${t("m_status")}</div><b>${c.status==="OPEN"?t("m_opened"):c.status==="CLOSED"?t("m_closed"):c.status}</b><div class="muted">${t("m_opened")} ${esc(c.opened_at.replace("T"," ").slice(0,16))}</div></div></div>
+      ${riskBanner}
+      <div class="card" style="margin-top:14px"><h3>${t("m_perm_hist")}</h3><div class="timeline">${c.reports.map(r=>{
+        let rp=r.prediction||{}, op=rp.outbreak_probability; if(op==null) op=rp.escalation_probability;
+        let modelLine="";
+        let inputs=rp.input_summary||r.report_inputs||{};
+        let inputLine=(inputs.herd_size||inputs.dist_waterbody_km)?`<div class="muted2">${t("m_herd_size")}: ${esc(inputs.herd_size??"—")} · ${t("m_water_body")}: ${esc(inputs.dist_waterbody_km??"—")}</div>`:"";
+        if(role==="government"){
+          modelLine=typeof op==="number"?`<div class="muted2">Outbreak risk: ${Math.round(op*100)}% · ${esc(statusLabel(rp.outbreak_status))}</div>`:"";
+        }else if(role==="vet"){
+          modelLine=rp.predictions?.length?`<div class="muted2">Disease: ${esc(rp.predictions.map(x=>diseaseLabel(x.disease)+" "+(typeof x.probability==="number"?Math.round(x.probability*100)+"%":"")).join(" · "))} · Outbreak: ${typeof op==="number"?Math.round(op*100)+"%":"—"}</div>`:"";
+        }else{
+          modelLine=rp.predictions?.length?`<div class="muted2">${t("m_model")} ${esc(rp.predictions.map(x=>diseaseLabel(x.disease)+" "+(typeof x.probability==="number"?Math.round(x.probability*100)+"%":"")).join(" · "))} · ${t("m_triage")} ${esc(statusLabel(rp.triage_risk))} · ${t("m_outbreak")} ${typeof op==="number"?Math.round(op*100)+"%":"—"}</div>`:"";
+        }
+        let symTranslated=r.symptoms.map(s=>symptomLabel(s)).join(", ");
+        let wxLine = r.weather&&r.weather.available!==false?`<div class="muted2">🌦️ ${esc(r.weather.temperature_c??"—")}°C · ${esc(r.weather.humidity_pct??"—")}% ${t("m_hum")} · ${esc(r.weather.rainfall_mm??"—")}mm ${t("m_rain")} · ${t("m_season")} ${esc(r.weather.season||"—")}</div>`:"";
+        return `<div class="timeline-item"><b>${t("m_report")} · ${esc(r.reported_at.replace("T"," ").slice(0,16))}</b><div class="muted">${esc(symTranslated)}</div>${r.notes?`<div>${esc(r.notes)}</div>`:""}${inputLine}${modelLine}${wxLine}</div>`;
+      }).join("")||`<div class='muted'>${t("m_no_reports")}</div>`}${c.actions.map(a=>`<div class="timeline-item"><b>${esc(a.action_type)} · ${esc(a.action_at.replace("T"," ").slice(0,16))}</b><div>${esc(a.details)}</div><div class="muted2">by ${esc(a.vet_name)}</div></div>`).join("")}</div></div>
+      ${c.vaccinations?.length?`<div class="card" style="margin-top:14px"><h3>Vaccinations recorded in this case</h3>${c.vaccinations.map(v=>`<div class="animal-line"><div style="flex:1"><b>${esc(v.vaccine_name)} · ${v.dose} ${esc(v.unit)}</b><div class="muted">${esc(v.administered_at.replace('T',' ').slice(0,16))} · ${esc(v.vet_name)}</div>${v.batch_no?`<div class="muted2">Batch ${esc(v.batch_no)}</div>`:''}</div></div>`).join('')}</div>`:''}
+      ${gramvetState.currentUser.role==="vet"&&c.status!=="CLOSED"?`<div class="card" style="margin-top:14px"><h3>Veterinary action</h3>
+        <label class="field"><span class="label">Action</span><select id="actType"><option>TEST</option><option>MEDICATION</option><option>NOTE</option><option>CURE</option></select></label>
+        <label class="field"><span class="label">Details</span><textarea id="actDetails" placeholder="Record exactly what you did, medication/treatment, findings, or cure confirmation."></textarea></label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="addAction(${c.id})">Save clinical action</button><button class="btn" onclick="vaccineModal(${c.id})">Record vaccination</button><button class="btn secondary" onclick="modelReviewModal(${c.id})">Review model prediction</button><button class="btn amber" onclick="outbreakModal(${c.id})">Outbreak assessment</button><button class="btn amber" onclick="resourceModal(${c.id})">Request resources</button><button class="btn danger" onclick="closeCase(${c.id})">Close case</button></div><div class="muted2" style="margin-top:8px">A case cannot be closed until a CURE action has been recorded by this veterinarian.</div></div>`:""}
+      ${c.vet_name?`<div class="notice" style="margin-top:14px">${t("m_assigned_vet")} <b>${esc(c.vet_name)}</b> · ${esc(c.vet_phone||"")} · ${esc(c.vet_address||"")}</div>`:""}`;
+    modal.classList.remove("hidden")
+  }catch(e){alert(e.message)}
+}
+async function addAction(id){try{await api(`/api/vet/cases/${id}/action`,{method:"POST",body:JSON.stringify({action_type:actType.value,details:actDetails.value})});showCase(id)}catch(e){alert(e.message)}}
+async function closeCase(id){if(!confirm("Close this case? Its full history will remain visible permanently."))return;try{await api(`/api/vet/cases/${id}/close`,{method:"POST"});showCase(id)}catch(e){alert(e.message)}}
+function vaccineModal(caseId){modalBody.innerHTML=`<h2>Record vaccination</h2><p class="muted">This creates a permanent vaccination record, adds the clinical action, and deducts the dose from your personal veterinary stock.</p><div class="formgrid"><label class="field"><span class="label">Vaccine</span><select id="vxName"><option value="FMD">FMD Vaccine</option><option value="HS">HS Vaccine</option><option value="LSD">LSD Vaccine</option><option value="BQ">BQ Vaccine</option></select></label><label class="field"><span class="label">Dose</span><input id="vxDose" type="number" min="0.01" step="0.01" value="1"></label><label class="field"><span class="label">Unit</span><input id="vxUnit" value="dose"></label><label class="field"><span class="label">Administered date/time</span><input id="vxWhen" type="datetime-local"></label><label class="field"><span class="label">Batch number</span><input id="vxBatch"></label><label class="field full"><span class="label">Notes</span><textarea id="vxNotes"></textarea></label></div><button class="btn" onclick="saveVaccine(${caseId})">Save vaccination</button>`;let d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());vxWhen.value=d.toISOString().slice(0,16);modal.classList.remove('hidden')}
+async function saveVaccine(id){try{let when=vxWhen.value?new Date(vxWhen.value).toISOString():new Date().toISOString();await api(`/api/vet/cases/${id}/vaccine`,{method:'POST',body:JSON.stringify({vaccine_name:vxName.value,dose:Number(vxDose.value),unit:vxUnit.value,administered_at:when,batch_no:vxBatch.value,notes:vxNotes.value})});showCase(id)}catch(e){alert(e.message)}}
+function modelReviewModal(caseId){
+  modalBody.innerHTML=`<h2>Model prediction review</h2>
+  <p class="muted">Record whether the disease model's preliminary prediction matched the veterinarian's field assessment. This is stored for later model evaluation.</p>
+  <label class="field"><span class="label">Was the model prediction correct?</span><select id="modelCorrect"><option value="yes">Yes</option><option value="no">No</option></select></label>
+  <label class="field"><span class="label">Predicted disease / model output</span><input id="modelPred" placeholder="e.g. FMD 82%"></label>
+  <label class="field"><span class="label">Notes</span><textarea id="modelReviewNotes"></textarea></label>
+  <button class="btn" onclick="submitModelReview(${caseId})">Save review</button>`;
+  modal.classList.remove("hidden")
+}
+async function submitModelReview(id){
+  try{await api(`/api/vet/cases/${id}/model-review`,{method:"POST",body:JSON.stringify({correct:modelCorrect.value==="yes",predicted:modelPred.value,notes:modelReviewNotes.value})});closeModal();showCase(id)}catch(e){alert(e.message)}
+}
+function resourceModal(caseId){
+  let c=window.currentOpenCase||(_cases||[]).find(x=>x.id===caseId);
+  modalBody.innerHTML=`<h2>Request government resources</h2>
+  <p class="muted">The request is linked to the village and captures the current active case count so government sees the operational need.</p>
+  <div class="formgrid">
+    <label class="field"><span class="label">Vaccine / Resource 1</span><select id="res1name"><option value="FMD">FMD Vaccine</option><option value="HS">HS Vaccine</option><option value="LSD">LSD Vaccine</option><option value="BQ">BQ Vaccine</option></select></label>
+    <label class="field"><span class="label">Quantity (doses)</span><input id="res1qty" type="number" min="0" placeholder="e.g. 50"></label>
+    <label class="field"><span class="label">Unit</span><input id="res1unit" value="dose"></label>
+    <label class="field"><span class="label">Vaccine / Resource 2 (optional)</span><select id="res2name"><option value=""></option><option value="FMD">FMD Vaccine</option><option value="HS">HS Vaccine</option><option value="LSD">LSD Vaccine</option><option value="BQ">BQ Vaccine</option></select></label>
+    <label class="field"><span class="label">Quantity (doses)</span><input id="res2qty" type="number" min="0"></label>
+    <label class="field"><span class="label">Unit</span><input id="res2unit" value="dose"></label>
+  </div>
+  <label class="field"><span class="label">Reason / field requirement</span><textarea id="resReason" placeholder="Explain why these quantities are required."></textarea></label>
+  <input type="hidden" id="resVillage" value="${c?.village_name||""}">
+  <button class="btn" onclick="submitResourceRequest(${caseId})">Send request to government</button>`;
+  modal.classList.remove("hidden")
+}
+async function submitResourceRequest(caseId){
+  try{
+    let c=window.currentOpenCase||(_cases||[]).find(x=>x.id===caseId);
+    if(!c || !c.village_id) return alert("Village assignment could not be resolved.");
+    let resources=[];
+    if(res1name.value&&Number(res1qty.value)>0)resources.push({name:res1name.value,quantity:Number(res1qty.value),unit:res1unit.value||"units"});
+    if(res2name.value&&Number(res2qty.value)>0)resources.push({name:res2name.value,quantity:Number(res2qty.value),unit:res2unit.value||"units"});
+    if(!resources.length)return alert("Enter at least one requested resource and quantity.");
+    await api("/api/vet/resource-request",{method:"POST",body:JSON.stringify({village_id:c.village_id,resources,reason:resReason.value})});
+    closeModal();alert("Government has been notified of the resource request.");showCase(caseId)
+  }catch(e){alert(e.message)}
+}
+async function vetDeliverResource(id){try{await api(`/api/vet/resource-request/${id}/deliver`,{method:"POST"});go("dashboard")}catch(e){alert(e.message)}}
+function outbreakModal(caseId){modalBody.innerHTML=`<h2>Veterinary outbreak assessment</h2><p class="muted">Government receives an outbreak alert only after the veterinarian confirms it. The model's outbreak likelihood remains a decision-support input.</p><label class="field"><span class="label">Is there really an outbreak?</span><select id="outConfirm"><option value="no">No</option><option value="yes">Yes — confirmed by field assessment</option></select></label><label class="field"><span class="label">Model status / prediction</span><input id="outPred" placeholder="Paste model outbreak status/probability if available"></label><label class="field"><span class="label">Notes</span><textarea id="outNotes"></textarea></label><button class="btn" onclick="submitOutbreak(${caseId})">Save assessment</button>`}
+async function submitOutbreak(id){try{let j=await api(`/api/vet/cases/${id}/outbreak`,{method:"POST",body:JSON.stringify({confirmed:outConfirm.value==="yes",predicted:outPred.value,notes:outNotes.value})});closeModal();alert(j.confirmed?"Government and the relevant local alert recipients have been notified.":"Assessment saved; government was not alerted because the outbreak was not confirmed.");go("health")}catch(e){alert(e.message)}}
+async function notifications(){
+  let j=await api("/api/notifications");document.getElementById("notifCount").textContent=j.unread;
+  main.innerHTML=renderTop("Notifications","Case updates, vet notifications, confirmed outbreak alerts and resource decisions.");
+  main.innerHTML+=`<div class="card"><div class="toolbar"><h3>${j.notifications.length} recent notifications</h3><button class="btn secondary" onclick="markAllRead()">Mark all read</button></div>${j.notifications.map(n=>`<div class="notif ${n.read_at?"":"unread"}"><div><span class="pill ${n.severity==="CRITICAL"?"bad":n.severity==="HIGH"?"warn":"info"}">${esc(n.severity)}</span> <b>${esc(n.title)}</b></div><div style="margin-top:5px">${esc(n.message)}</div><div class="muted2" style="margin-top:5px">${esc(n.created_at.replace("T"," ").slice(0,16))}</div></div>`).join("")||`<p class="muted">No notifications.</p>`}</div>`;
+  if(j.unread)await api("/api/notifications/read",{method:"POST",body:JSON.stringify({all:true})}),refreshNotifications();
+}
+async function refreshNotifications(){
+  try{
+    let j=await api("/api/notifications");
+    notifCount.textContent=j.unread;
+    
+    let hasCriticalUnread = j.notifications.some(n => !n.read_at && n.severity === "CRITICAL" && (n.kind === "OUTBREAK" || n.kind === "LOW_STOCK"));
+    if(hasCriticalUnread) {
+        if(!window.sirenPlayed) {
+            playSiren();
+            window.sirenPlayed = true;
+        }
+    } else {
+        window.sirenPlayed = false;
+    }
+  }catch{}
+}
+function playSiren() {
+    try {
+        let ctx = new (window.AudioContext || window.webkitAudioContext)();
+        let osc = ctx.createOscillator();
+        let gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'square';
+        let now = ctx.currentTime;
+        let t = now;
+        for(let i=0; i<3; i++) {
+            osc.frequency.setValueAtTime(900, t);
+            t += 0.5;
+            osc.frequency.setValueAtTime(700, t);
+            t += 0.5;
+        }
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.linearRampToValueAtTime(0.1, now + 2.5);
+        gain.gain.linearRampToValueAtTime(0, now + 3.0);
+        osc.start(now);
+        osc.stop(now + 3.0);
+    } catch(e) {}
+}
+async function markAllRead(){await api("/api/notifications/read",{method:"POST",body:JSON.stringify({all:true})});notifications()}
+async function farmers(){
+  if(gramvetState.currentUser.role!=="vet" && gramvetState.currentUser.role!=="government"){return alert("Vet/Govt access required.")}
+  let j;
+  if(gramvetState.currentUser.role==="vet"){
+    j=await api("/api/vet/overview");
+  } else {
+    j=await api("/api/govt/farmers");
+  }
+  main.innerHTML=renderTop("Farmers & villages", gramvetState.currentUser.role==="vet" ? "Your assigned villages and a searchable cattle/buffalo owner directory." : "National directory of all villages and livestock owners.");
+  main.innerHTML+=`<div class="grid three">${j.villages.map(v=>`<div class="card"><h3>${esc(v.name)}</h3><div class="muted">${esc(v.pincode)}</div><div style="margin-top:12px"><b>${v.animals}</b> animals · <b>${v.farmers}</b> farmers · <b>${v.active_cases||0}</b> active cases</div></div>`).join("")}</div>
+  <div class="card" style="margin-top:18px"><div class="toolbar"><h3>Search livestock by owner or animal</h3><input id="ownerSearch" class="search" placeholder="Owner / animal / ID" oninput="ownerFilter()"></div><div id="ownerTable"></div></div>
+  ${gramvetState.currentUser.role==="vet" ? `<div class="card" style="margin-top:18px"><h3>Assign a village</h3><div class="formgrid"><input id="avillage" placeholder="Village"><input id="apin2" placeholder="Pincode"><button class="btn" onclick="assignVillage()">Assign to me</button></div></div>` : ""}`;
+  window._vetAnimals=j.animals;ownerFilter();
+}
+function ownerFilter(){let q=(ownerSearch.value||"").toLowerCase();let arr=(_vetAnimals||[]).filter(a=>[a.name,a.tag,a.farmer_name,a.village].join(" ").toLowerCase().includes(q));ownerTable.innerHTML=`<div class="tablewrap"><table><thead><tr><th>Animal</th><th>Owner</th><th>Village</th><th>Phone</th></tr></thead><tbody>${arr.map(a=>`<tr><td><b>${esc(a.tag)}</b><br>${esc(a.name)} · ${esc(a.species)}</td><td>${esc(a.farmer_name)}</td><td>${esc(a.village)}</td><td>${esc(a.farmer_phone)}</td></tr>`).join("")}</tbody></table></div>`}
+async function assignVillage(){try{await api("/api/vet/assign",{method:"POST",body:JSON.stringify({village:avillage.value,pincode:apin2.value})});farmers()}catch(e){alert(e.message)}}
+async function outbreak(){
+  if(gramvetState.currentUser.role==="farmer"){return notifications()}
+  await loadAnimals();
+  let full=await api("/api/cases"), cs=full.cases;
+  let rows=cs.map(c=>({c,r:c.reports?.[c.reports.length-1]?.prediction||{}}));
+  let connected=rows.some(x=>x.r.connected || typeof (x.r.outbreak_probability??x.r.escalation_probability)==="number");
+  main.innerHTML=renderTop("Outbreak intelligence","Model-driven village/animal outbreak risk. Government alert only after vet confirmation.");
+  main.innerHTML+=`<div class="grid three"><div class="card stat"><div><div class="eyebrow">Cases assessed</div><div class="big">${cs.length}</div></div><div class="stat-icon">📊</div></div><div class="card stat"><div><div class="eyebrow">Outbreak model</div><div class="big">${connected?"Connected":"Not connected"}</div></div><div class="stat-icon">🤖</div></div><div class="card stat"><div><div class="eyebrow">Alert radius</div><div class="big">5 km</div></div><div class="stat-icon">📍</div></div></div>
+  <div class="card" style="margin-top:18px"><div class="toolbar"><h3>Cases needing field assessment</h3></div>${rows.slice(0,20).map(x=>{
+    let role=gramvetState.currentUser.role;
+    let op=x.r.outbreak_probability; if(op==null) op=x.r.escalation_probability;
+    let disease=x.r.predictions?.[0]?.disease;
+    let label=role==="government"
+      ?(typeof op==="number"?Math.round(op*100)+"% outbreak risk":"Outbreak pending")
+      :(typeof op==="number"?`${esc(disease||"Disease")} · ${Math.round(op*100)}% outbreak`:"Model result pending");
+    return `<div class="animal-line"><div style="flex:1"><b>#${x.c.id} · ${esc(x.c.animal_name)}</b><div class="muted">${esc(x.c.village_name)} · ${esc(x.c.farmer_name)}</div></div><span class="pill ${op>=.7?"bad":op>=.4?"warn":"info"}">${label}</span><button class="btn secondary" onclick="showCase(${x.c.id})">Open</button></div>`;
+  }).join("")||"<p class='muted'>No cases.</p>"}</div>`;
+}
+function debouncedVetSearch(){clearTimeout(window._d);window._d=setTimeout(async()=>{let j=await api("/api/vet/overview");let q=(dashSearch.value||"").toLowerCase();let arr=j.animals.filter(a=>[a.name,a.tag,a.farmer_name,a.village].join(" ").toLowerCase().includes(q));dashResults.innerHTML=arr.slice(0,12).map(a=>`<div class="animal-line"><div style="flex:1"><b>${esc(a.name)}</b><div class="muted">${esc(a.tag)} · ${esc(a.farmer_name)} · ${esc(a.village)}</div></div></div>`).join("")||"<div class='muted'>No matches.</div>"},200)}
+async function govt(){
+  if(gramvetState.currentUser.role!=="government")return alert("Government access required.");
+  let firstName = (gramvetState.currentUser.name || "").split(" ")[0] || "";
+  main.innerHTML=renderTop(`${t("welcome")} ${firstName}`,"Loading...");
+  let j,totals;
+  try{
+    j=await api("/api/govt/overview");
+    totals=j.totals;
+  }catch(e){
+    main.innerHTML=renderTop("Government dashboard","Error loading data: "+e.message);
+    main.innerHTML+=`<div class="card" style="margin-top:18px"><p class="muted" style="color:red">⚠ Backend error: ${esc(e.message)}. Please check the server is running and restart it, then refresh.</p></div>`;
+    return;
+  }
+  main.innerHTML=renderTop(`${t("welcome")} ${firstName}`,"Nation/district administration view: registrations, vaccination, model risk, confirmed outbreaks, vet performance and resource requests.");
+  main.innerHTML+=`<div class="grid four">
+    <div class="card stat"><div><div class="eyebrow">Registered farmers</div><div class="big">${totals.farmers}</div></div><div class="stat-icon">👨‍🌾</div></div>
+    <div class="card stat"><div><div class="eyebrow">Registered livestock</div><div class="big">${totals.animals}</div></div><div class="stat-icon">🐄</div></div>
+    <div class="card stat"><div><div class="eyebrow">Vaccination coverage</div><div class="big">${totals.vaccination_pct}%</div><div class="muted">${totals.vaccination_events} events (last 1 yr)</div></div><div class="stat-icon">💉</div></div>
+    <div class="card stat"><div><div class="eyebrow">Confirmed outbreaks</div><div class="big">${totals.confirmed_outbreaks}</div></div><div class="stat-icon">🚨</div></div>
+  </div>
+  <div class="grid two" style="margin-top:18px">
+    <div class="card"><h3>Case trend — last 14 days</h3>${trendBars(j.trend)}</div>
+    <div class="card"><h3>Vaccination &amp; Resources</h3>
+      <div style="display:flex;justify-content:space-between"><b>${totals.vaccinated} / ${totals.animals} vaccinated</b><b>${totals.vaccination_pct}%</b></div>
+      <div class="bar" style="margin-top:10px;margin-bottom:20px"><span style="width:${Math.min(100,totals.vaccination_pct)}%"></span></div>
+      <div style="display:flex;justify-content:space-between"><span>All-time resources dispatched</span><b>${totals.total_dispatched_all_time}</b></div>
+      <div style="display:flex;justify-content:space-between;margin-top:5px"><span>This month dispatched</span><b>${totals.total_dispatched_monthly}</b></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:18px;position:relative;z-index:1;">
+    <div class="toolbar"><h3>Maharashtra Outbreak Map</h3></div>
+    <div id="mahaMap" style="height:450px;border-radius:10px;"></div>
+  </div>
+  <div class="card" style="margin-top:18px"><h3>Veterinary performance</h3><div class="tablewrap"><table><thead><tr><th>Veterinarian</th><th>Phone</th><th>Cases</th><th>Closed</th><th>Vacc %</th><th>Animals</th><th>Farmers</th><th>Resources left / sent</th></tr></thead><tbody>${j.vets.map(v=>`<tr><td>${esc(v.name)}</td><td>${esc(v.phone)}</td><td>${v.handled}</td><td>${v.closed}</td><td>${v.vaccination_pct}%</td><td>${v.animals_under}</td><td>${v.farmers_under}</td><td>${v.resources_left} / ${v.resources_sent}</td></tr>`).join("")||"<tr><td colspan='8'>No vets registered.</td></tr>"}</tbody></table></div></div>
+  <div class="grid two" style="margin-top:18px"><div class="card"><h3>Vaccinations by vaccine</h3>${j.vaccinations.by_type.map(v=>`<div class="animal-line"><div style="flex:1"><b>${esc(v.vaccine_name)}</b><div class="muted">${v.doses} event(s)</div></div><span class="pill">${v.quantity} doses</span></div>`).join('')||'<p class="muted">No vaccination events recorded.</p>'}</div><div class="card"><h3>Vaccinations by veterinarian</h3>${j.vaccinations.by_vet.map(v=>`<div class="animal-line"><div style="flex:1"><b>${esc(v.vet_name)}</b><div class="muted">${v.doses} event(s)</div></div><span class="pill">${v.quantity} doses</span></div>`).join('')||'<p class="muted">No vaccination events recorded.</p>'}</div></div>
+  <div class="card" style="margin-top:18px"><h3>Vaccine stock usage</h3><div class="tablewrap"><table><thead><tr><th>Vaccine</th><th>Used</th><th>Remaining stock</th><th>Unit</th></tr></thead><tbody>${j.vaccinations.inventory_usage.map(v=>`<tr><td>${esc(v.resource_name)}</td><td>${v.used_quantity}</td><td>${v.remaining_quantity??'—'}</td><td>${esc(v.unit||'units')}</td></tr>`).join('')||'<tr><td colspan="4">No vaccine usage recorded.</td></tr>'}</tbody></table></div></div>
+  <div class="card" style="margin-top:18px"><div class="toolbar"><h3>All case records</h3><button class="btn secondary" onclick="go('outbreak')">Risk / outbreak view</button></div><div id="govCaseTable">Loading...</div></div>
+  <div class="card" style="margin-top:18px"><div class="toolbar"><h3>Veterinary resource requests</h3><button class="btn secondary" onclick="showInventory()">Manage inventory</button></div><div class="tablewrap"><table><thead><tr><th>Village</th><th>Vet</th><th>Active cases</th><th>Requested resources</th><th>Status</th><th></th></tr></thead><tbody>${j.requests.map(r=>`<tr><td>${esc(r.village_name)}</td><td>${esc(r.vet_name)}</td><td>${r.case_count}</td><td>${esc(r.resources.map(x=>`${x.name}: ${x.quantity} ${x.unit||""}`).join(" · "))}</td><td><span class="pill">${esc(r.status)}</span></td><td>${r.status==="PENDING"?`<button class="btn" onclick="reviewResource(${r.id},'DISPATCHED')">Dispatch</button> <button class="btn danger" onclick="reviewResource(${r.id},'REJECTED')">Reject</button>`:r.status==="DISPATCHED"?`<button class="btn" onclick="reviewResource(${r.id},'DELIVERED')">Mark Delivered</button>`:""}</td></tr>`).join("")||"<tr><td colspan='6'>No resource requests.</td></tr>"}</tbody></table></div></div>`;
+  setTimeout(() => {
+    try{
+      let map = L.map('mahaMap').setView([19.7515, 75.7139], 6);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
+      j.villages.forEach(v => {
+        let lat=v.lat??v.latitude, lon=v.lon??v.longitude;
+        if (lat==null || lon==null) return;
+        if (!v.active_cases || v.active_cases === 0) return;
+        let level = v.outbreak_level || (v.confirmed_outbreak ? "HIGH" : "LOW");
+        let color = level==="HIGH" ? "red" : level==="MID" ? "orange" : "green";
+        let fillColor = level==="HIGH" ? "#f03" : level==="MID" ? "#ff8c00" : "#0a0";
+        let riskLabel = level==="HIGH"
+          ? '<b style="color:red">🔴 HIGH RISK — Confirmed / Critical Outbreak (&gt;5 cases)</b>'
+          : level==="MID"
+          ? '<b style="color:orange">🟠 MID RISK — Cluster Detected (3–5 cases)</b>'
+          : '<span style="color:green">🟢 Monitoring</span>';
+        let marker = L.circleMarker([lat,lon],{color,fillColor:color,radius:9,fillOpacity:0.85}).addTo(map);
+        let content = `<div style="text-align:center;min-width:140px">
+          <h4 style="margin:0 0 5px;font-size:14px;color:#111">${esc(v.name)}</h4>
+          <div style="font-size:12px;color:#444">
+            <b>Disease:</b> ${esc(v.top_disease||"Pending model assessment")}<br>
+            <b>Affected animals:</b> ${v.affected_count}<br>
+            <b>Cured/Treated:</b> ${v.treated_count}
+          </div>
+          <div style="margin-top:6px;font-size:11px">${riskLabel}</div>
+        </div>`;
+        marker.bindPopup(content);
+        marker.on('mouseover',function(){this.openPopup()});
+        marker.on('mouseout',function(){this.closePopup()});
+        L.circle([lat,lon],{color,fillColor,fillOpacity:0.15,radius:5000}).addTo(map);
+      });
+    }catch(mapErr){console.warn("Map error:",mapErr);}
+  }, 100);
+  try{
+    let all=await api("/api/cases");
+    if(window.govCaseTable) govCaseTable.innerHTML=`<div class="tablewrap"><table><thead><tr><th>Case</th><th>Animal</th><th>Owner</th><th>Village</th><th>Vet</th><th>Status</th></tr></thead><tbody>${all.cases.slice(0,100).map(c=>`<tr><td>#${c.id}<div class="muted2">${esc(c.opened_at.replace("T"," ").slice(0,16))}</div></td><td>${esc(c.animal_name)} · ${esc(c.species)}</td><td>${esc(c.farmer_name)}</td><td>${esc(c.village_name)}</td><td>${esc(c.vet_name||"Unassigned")}</td><td>${esc(c.status)}</td></tr>`).join("")||"<tr><td colspan='6'>No cases.</td></tr>"}</tbody></table></div>`;
+  }catch(e){if(window.govCaseTable)govCaseTable.innerHTML="<div class='muted'>Unable to load case records.</div>"}
+}
+function trendBars(arr){let max=Math.max(1,...arr.map(x=>x.cases));return arr.map(x=>`<div style="display:grid;grid-template-columns:84px 1fr 36px;gap:7px;align-items:center;margin:7px 0"><span class="mini">${esc(x.date.slice(5))}</span><div class="bar"><span style="width:${Math.round(x.cases/max*100)}%"></span></div><b style="font-size:11px">${x.cases}</b></div>`).join("")}
+async function showInventory(){let j=await api("/api/govt/overview");modalBody.innerHTML=`<h2>Resource inventory</h2><p class="muted">Keep available quantities current so vets can request against real stock during the demo.</p><div>${j.inventory.map(x=>`<div class="animal-line"><div style="flex:1"><b>${esc(x.resource_name)}</b><div class="muted">${x.available_qty} ${esc(x.unit)}</div></div></div>`).join("")||"<div class='muted'>No inventory yet.</div>"}</div><div class="formgrid" style="margin-top:14px"><input id="resName" placeholder="e.g. FMD vaccine"><input id="resQty" type="number" min="0" placeholder="Available quantity"><input id="resUnit" placeholder="doses / kits / units" value="units"></div><button class="btn" onclick="saveInventory()">Save inventory</button>`;modal.classList.remove("hidden")}
+async function saveInventory(){try{await api("/api/govt/inventory",{method:"POST",body:JSON.stringify({resource_name:resName.value,available_qty:Number(resQty.value),unit:resUnit.value})});showInventory()}catch(e){alert(e.message)}}
+async function reviewResource(id,status){try{await api(`/api/govt/resource-request/${id}`,{method:"POST",body:JSON.stringify({status})});go("govt")}catch(e){alert(e.message)}}
+async function boot(){
+  setLanguage(currentLang);
+  try{
+    let m=await api("/api/me");
+    if(m.authenticated){
+      gramvetState.currentUser = m.user;
+      openApp();
+    }else authMode("login");
+  }catch(e){authMode("login");}
+}
+boot();
+setInterval(refreshNotifications,20000);
+</script>
+</body>
+</html>
