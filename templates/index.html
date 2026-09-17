@@ -25,11 +25,19 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:12px 9px;
 .auth-hero{position:relative;min-height:100vh;display:flex;flex-direction:column;background:var(--deep);overflow:hidden}
 .auth-hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;animation:fadeBg 12s infinite;z-index:0}
 .auth-hero-bg:nth-child(1){background-image:url('/media/p1.jpg');animation-delay:0s; opacity:1; animation:none;}
+[data-theme="dark"] .auth-hero-bg:nth-child(1){background-image:url('/media/p1_dark.jpg');}
 .auth-hero-bg:nth-child(2){display:none}
 .auth-hero-bg:nth-child(3){display:none}
 @keyframes fadeBg { 0%, 40% { opacity: 1; } 50%, 90% { opacity: 0; } 100% { opacity: 1; } }
 .auth-header{position:relative;z-index:2;padding:20px 40px;display:flex;justify-content:space-between;align-items:center;background:transparent}
 .auth-header .brand{color:var(--green);font-size:24px;display:flex;align-items:center}
+.auth-brand-badge{display:flex;align-items:center;transition:background .3s,padding .3s,border-radius .3s}
+[data-theme="dark"] .auth-brand-badge{background:rgba(255,255,255,0.92);padding:6px 14px;border-radius:14px;box-shadow:0 4px 18px rgba(0,0,0,0.3);backdrop-filter:blur(8px)}
+.auth-hero-logo{max-height:220px;max-width:90%;object-fit:contain;transition:opacity .3s ease}
+.auth-logo-light{display:block}
+.auth-logo-dark{display:none}
+[data-theme="dark"] .auth-logo-light{display:none !important}
+[data-theme="dark"] .auth-logo-dark{display:block !important;mix-blend-mode:screen;filter:drop-shadow(0 0 20px rgba(46, 204, 113, 0.45))}
 .auth-hero-text{position:relative;z-index:2;flex:1;display:flex;align-items:center;justify-content:center;padding:20px}
 .auth-hero-text h1{color:#fff;font-size:46px;text-align:center;max-width:900px;text-transform:uppercase;letter-spacing:1.5px;text-shadow:0 4px 20px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.5)}
 .hero-wave{position:absolute;bottom:0;left:0;width:100%;height:auto;z-index:3;display:block}
@@ -43,13 +51,110 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:12px 9px;
 .bar{height:12px;background:var(--bg);border-radius:99px;overflow:hidden}.bar>span{display:block;height:100%;background:var(--green);border-radius:99px}.riskdot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;background:var(--muted)}.riskdot.high{background:var(--red)}.riskdot.med{background:var(--amber)}.riskdot.low{background:var(--green)}
 .kpi{font-size:12px;color:var(--muted)}.timeline{border-left:2px solid var(--line);margin:15px 0;padding-left:17px}.timeline-item{margin-bottom:15px;position:relative}.timeline-item:before{content:"";position:absolute;width:9px;height:9px;border-radius:50%;background:var(--green);left:-22px;top:5px}.notif{border-bottom:1px solid var(--line);padding:12px 0}.notif.unread{background:var(--soft)}.mapgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:11px}.villagebox{border:1px solid var(--line);border-radius:13px;padding:13px}.mini{font-size:11px;color:var(--muted)}
 .theme-toggle{background:var(--soft);border:none;border-radius:50%;width:36px;height:36px;display:grid;place-items:center;font-size:16px;color:var(--ink)}
-[data-theme="dark"] .brand img { filter: invert(1) hue-rotate(180deg) brightness(1.5); }
+[data-theme="dark"] #app header .brand img { filter: invert(1) hue-rotate(180deg) brightness(1.5); }
 .logo-blend { mix-blend-mode: multiply; filter: contrast(1.4) brightness(1.1); }
+.auth-header .brand img, [data-theme="dark"] .auth-header .brand img { filter: contrast(1.4) brightness(1.1) !important; }
+[data-theme="dark"] .auth-header .theme-toggle,
+[data-theme="dark"] .auth-header select { mix-blend-mode: normal !important; background: rgba(24, 38, 30, 0.85) !important; color: var(--ink) !important; border: 1px solid var(--line) !important; backdrop-filter: blur(6px); }
 @media(max-width:1050px){aside{width:70px}.side-title,.nav span{display:none}.four{grid-template-columns:repeat(2,1fr)}.three,.two{grid-template-columns:1fr 1fr}.main{padding:19px}}
 @media(max-width:650px){header{padding:0 13px}.four,.three,.two,.formgrid,.symgrid{grid-template-columns:1fr}.main{padding:13px}.role{display:none}.auth-header{padding:15px 20px}.auth-hero-text h1{font-size:32px}}
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+let mediaRecorder = null;
+let audioChunks = [];
+let speechRec = null;
+let silenceTimer = null;
+let finalTranscript = "";
+
+function startSymptomVoiceRecording(btn) {
+    if (mediaRecorder && mediaRecorder.state === "recording") {
+        stopSymptomVoiceRecording();
+        return;
+    }
+    
+    let lang = document.getElementById("langApp").value || "en";
+    let speechLang = "en-IN";
+    if (lang === "hi") speechLang = "hi-IN";
+    if (lang === "mr") speechLang = "mr-IN";
+
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+        mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+        mediaRecorder.onstop = () => {
+            let blob = new Blob(audioChunks, { type: "audio/webm" });
+            let reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => {
+                window._lastAudioBase64 = reader.result;
+                document.getElementById("voiceStatus").innerText = "Audio recorded! Matching symptoms...";
+                matchSymptomsFromTranscript(finalTranscript);
+            }
+        };
+
+        let vStatus = document.getElementById("voiceStatus");
+        let vText = document.getElementById("voiceTranscript");
+        if (vStatus) { vStatus.style.display = "block"; vStatus.innerText = "Listening... Speak your symptoms."; }
+        if (vText) { vText.style.display = "block"; vText.innerText = ""; }
+        finalTranscript = "";
+        
+        btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-top:-2px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>'; // red stop or something
+        btn.style.background = "var(--red)";
+
+        let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+            speechRec = new SpeechRecognition();
+            speechRec.continuous = true;
+            speechRec.interimResults = true;
+            speechRec.lang = speechLang;
+
+            speechRec.onresult = function(event) {
+                clearTimeout(silenceTimer);
+                
+                let interim = "";
+                finalTranscript = "";
+                for (let i = 0; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) finalTranscript += event.results[i][0].transcript;
+                    else interim += event.results[i][0].transcript;
+                }
+                if (vText) vText.innerText = finalTranscript + " " + interim;
+
+                silenceTimer = setTimeout(() => { stopSymptomVoiceRecording(); }, 3000);
+            };
+            
+            speechRec.onend = function() {};
+            speechRec.start();
+            silenceTimer = setTimeout(() => { stopSymptomVoiceRecording(); }, 3000);
+        } else {
+            if (vText) vText.innerText = "Speech recognition not supported in this browser. Audio will be saved.";
+            silenceTimer = setTimeout(() => stopSymptomVoiceRecording(), 5000);
+        }
+
+        mediaRecorder.start();
+    }).catch(err => {
+        alert("Microphone access denied or error: " + err);
+    });
+}
+
+function stopSymptomVoiceRecording() {
+    clearTimeout(silenceTimer);
+    if (mediaRecorder && mediaRecorder.state === "recording") {
+        mediaRecorder.stop();
+        mediaRecorder.stream.getTracks().forEach(t => t.stop());
+    }
+    if (speechRec) {
+        try { speechRec.stop(); } catch(e){}
+    }
+    let btn = document.getElementById("micBtn");
+    if (btn) {
+        btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-top:-2px;"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>';
+        btn.style.background = "";
+    }
+}
+
+
+</script>
 </head>
 <body>
 <div id="auth" class="authwrap">
@@ -58,9 +163,9 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:12px 9px;
     <div class="auth-hero-bg"></div>
     <div class="auth-hero-bg"></div>
     <div class="auth-header">
-      <div class="brand">
-        <img src="/media/p4.png" class="logo-blend" style="height:50px;margin-right:15px" alt="MoE">
-        <img src="/media/p3.png" class="logo-blend" style="height:45px;margin-right:15px" alt="SIH">
+      <div class="brand auth-brand-badge">
+        <img src="/media/p4.png" class="logo-blend" style="height:50px;margin-right:15px" alt="SIH">
+        <img src="/media/p3.png" class="logo-blend" style="height:45px;margin-right:15px" alt="National Emblem">
       </div>
       <div style="display:flex;align-items:center;gap:8px">
         <button class="theme-toggle" onclick="toggleTheme()" id="themeBtnAuth" style="mix-blend-mode:multiply">🌙</button>
@@ -71,8 +176,9 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:12px 9px;
         </select>
       </div>
     </div>
-    <div style="flex:1;display:flex;align-items:center;justify-content:center;z-index:2;position:relative;">
-      <img src="/media/p2.png" style="height:220px;opacity:0.95" alt="GramVet Logo">
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;z-index:2;position:relative;padding:15px 0;">
+      <img id="authGramvetLogoLight" class="auth-hero-logo auth-logo-light" src="/media/p2.png" style="height:220px" alt="GramVet Logo">
+      <img id="authGramvetLogoDark" class="auth-hero-logo auth-logo-dark" src="/media/p2_dark.jpg" style="height:220px" alt="GramVet Logo">
     </div>
     <div class="auth-content" style="padding-bottom:60px">
       <div class="auth-box" style="margin-top:0">
@@ -132,14 +238,20 @@ var currentTheme = localStorage.getItem("gramvet_theme") || "light";
 var currentAuthMode = "login";
 
 function applyTheme() {
+  var logoLight = document.getElementById("authGramvetLogoLight");
+  var logoDark = document.getElementById("authGramvetLogoDark");
   if (currentTheme === "dark") {
     document.documentElement.setAttribute("data-theme", "dark");
     if(document.getElementById("themeBtnAuth")) document.getElementById("themeBtnAuth").textContent = "☀️";
     if(document.getElementById("themeBtnApp")) document.getElementById("themeBtnApp").textContent = "☀️";
+    if(logoLight) logoLight.style.display = "none";
+    if(logoDark) logoDark.style.display = "block";
   } else {
     document.documentElement.removeAttribute("data-theme");
     if(document.getElementById("themeBtnAuth")) document.getElementById("themeBtnAuth").textContent = "🌙";
     if(document.getElementById("themeBtnApp")) document.getElementById("themeBtnApp").textContent = "🌙";
+    if(logoLight) logoLight.style.display = "block";
+    if(logoDark) logoDark.style.display = "none";
   }
 }
 function toggleTheme() {
@@ -985,7 +1097,7 @@ async function loadReportWeather(aid){
 }
 function reportModal(aid){
   let a=animals.find(x=>x.id===aid);
-  window.reportLat=null; window.reportLon=null; window._reportBusy=false;
+  window.reportLat=null; window.reportLon=null; window._reportBusy=false; window._lastAudioBase64=null;
   modalBody.innerHTML=`<h2>${t("m_report")} · ${esc(a.name)} <span class="pill">${esc(a.tag)}</span></h2>
   <p class="muted">${t("m_report_desc")}</p>
   <div id="reportWeather"></div>
@@ -999,7 +1111,10 @@ function reportModal(aid){
       <label class="field"><span class="label">${t("m_vacc_bq")}</span><input id="reportVaccBq" type="date"></label>
     </div>
   </div>
-  <div class="card" style="background:#fbfdfb"><div class="toolbar"><h3>${t("symptoms", "Symptoms")}</h3><span class="muted2">Select all observed</span></div>${symptomGrid()}</div>
+  <div class="card" style="background:#fbfdfb"><div class="toolbar"><h3>${t("symptoms", "Symptoms")} <button id="micBtn" class="btn secondary" style="border-radius:50%;padding:4px 8px;font-size:16px" type="button" onclick="startSymptomVoiceRecording(this)" title="Record Symptoms Voice"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-top:-2px;"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></button></h3><span class="muted2">Select all observed or tap mic</span></div>
+<div id="voiceStatus" style="font-size:12px;color:var(--green);display:none;margin-bottom:8px;">Listening... speak symptoms.</div>
+<div id="voiceTranscript" style="font-size:13px;padding:8px;background:var(--soft);border-radius:8px;margin-bottom:10px;display:none;"></div>
+${symptomGrid()}</div>
   <label class="field"><span class="label">${t("m_notes_opt")}</span><textarea id="reportNotes"></textarea></label>
   <button class="btn" onclick="submitReport(${aid})">${t("save_report")}</button>`;
   modal.classList.remove("hidden");
@@ -1033,7 +1148,7 @@ async function submitReport(aid){
   }
 
   try{
-    let j=await api("/api/cases/report",{method:"POST",body:JSON.stringify({animal_id:aid,symptoms,notes:reportNotes.value,latitude:window.reportLat,longitude:window.reportLon,...reportInputs})});
+    let j=await api("/api/cases/report",{method:"POST",body:JSON.stringify({animal_id:aid,symptoms,notes:reportNotes.value,latitude:window.reportLat,longitude:window.reportLon,audio_base64:window._lastAudioBase64,...reportInputs})});
     showPredictionResult(j);
   }catch(e){
     window._reportBusy=false;
@@ -1134,8 +1249,9 @@ async function showCase(id){
           modelLine=rp.predictions?.length?`<div class="muted2">${t("m_model")} ${esc(rp.predictions.map(x=>diseaseLabel(x.disease)+" "+(typeof x.probability==="number"?Math.round(x.probability*100)+"%":"")).join(" · "))} · ${t("m_triage")} ${esc(statusLabel(rp.triage_risk))} · ${t("m_outbreak")} ${typeof op==="number"?Math.round(op*100)+"%":"—"}</div>`:"";
         }
         let symTranslated=r.symptoms.map(s=>symptomLabel(s)).join(", ");
+        let audioLine = r.audio_url ? `<div style="margin-top:8px"><audio controls src="${esc(r.audio_url)}" style="height:32px; width: 100%; max-width: 300px;"></audio></div>` : "";
         let wxLine = r.weather&&r.weather.available!==false?`<div class="muted2">🌦️ ${esc(r.weather.temperature_c??"—")}°C · ${esc(r.weather.humidity_pct??"—")}% ${t("m_hum")} · ${esc(r.weather.rainfall_mm??"—")}mm ${t("m_rain")} · ${t("m_season")} ${esc(r.weather.season||"—")}</div>`:"";
-        return `<div class="timeline-item"><b>${t("m_report")} · ${esc(r.reported_at.replace("T"," ").slice(0,16))}</b><div class="muted">${esc(symTranslated)}</div>${r.notes?`<div>${esc(r.notes)}</div>`:""}${inputLine}${modelLine}${wxLine}</div>`;
+        return `<div class="timeline-item"><b>${t("m_report")} · ${esc(r.reported_at.replace("T"," ").slice(0,16))}</b><div class="muted">${esc(symTranslated)}</div>${r.notes?`<div>${esc(r.notes)}</div>`:""}${inputLine}${modelLine}${wxLine}${audioLine}</div>`;
       }).join("")||`<div class='muted'>${t("m_no_reports")}</div>`}${c.actions.map(a=>`<div class="timeline-item"><b>${esc(a.action_type)} · ${esc(a.action_at.replace("T"," ").slice(0,16))}</b><div>${esc(a.details)}</div><div class="muted2">by ${esc(a.vet_name)}</div></div>`).join("")}</div></div>
       ${c.vaccinations?.length?`<div class="card" style="margin-top:14px"><h3>Vaccinations recorded in this case</h3>${c.vaccinations.map(v=>`<div class="animal-line"><div style="flex:1"><b>${esc(v.vaccine_name)} · ${v.dose} ${esc(v.unit)}</b><div class="muted">${esc(v.administered_at.replace('T',' ').slice(0,16))} · ${esc(v.vet_name)}</div>${v.batch_no?`<div class="muted2">Batch ${esc(v.batch_no)}</div>`:''}</div></div>`).join('')}</div>`:''}
       ${gramvetState.currentUser.role==="vet"&&c.status!=="CLOSED"?`<div class="card" style="margin-top:14px"><h3>Veterinary action</h3>
@@ -1367,6 +1483,128 @@ async function boot(){
 }
 boot();
 setInterval(refreshNotifications,20000);
+
+let mediaRecorder = null;
+let audioChunks = [];
+let speechRec = null;
+let silenceTimer = null;
+let finalTranscript = "";
+
+function startSymptomVoiceRecording(btn) {
+    if (mediaRecorder && mediaRecorder.state === "recording") {
+        stopSymptomVoiceRecording();
+        return;
+    }
+    
+    let lang = document.getElementById("langApp").value || "en";
+    let speechLang = "en-IN";
+    if (lang === "hi") speechLang = "hi-IN";
+    if (lang === "mr") speechLang = "mr-IN";
+
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+        mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+        mediaRecorder.onstop = () => {
+            let blob = new Blob(audioChunks, { type: "audio/webm" });
+            let reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => {
+                window._lastAudioBase64 = reader.result;
+                document.getElementById("voiceStatus").innerText = "Audio recorded! Matching symptoms...";
+                matchSymptomsFromTranscript(finalTranscript);
+            }
+        };
+
+        let vStatus = document.getElementById("voiceStatus");
+        let vText = document.getElementById("voiceTranscript");
+        if (vStatus) { vStatus.style.display = "block"; vStatus.innerText = "Listening... Speak your symptoms."; }
+        if (vText) { vText.style.display = "block"; vText.innerText = ""; }
+        finalTranscript = "";
+        
+        btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-top:-2px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>'; // red stop or something
+        btn.style.background = "var(--red)";
+
+        let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+            speechRec = new SpeechRecognition();
+            speechRec.continuous = true;
+            speechRec.interimResults = true;
+            speechRec.lang = speechLang;
+
+            speechRec.onresult = function(event) {
+                clearTimeout(silenceTimer);
+                
+                let interim = "";
+                finalTranscript = "";
+                for (let i = 0; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) finalTranscript += event.results[i][0].transcript;
+                    else interim += event.results[i][0].transcript;
+                }
+                if (vText) vText.innerText = finalTranscript + " " + interim;
+
+                silenceTimer = setTimeout(() => { stopSymptomVoiceRecording(); }, 3000);
+            };
+            
+            speechRec.onend = function() {};
+            speechRec.start();
+            silenceTimer = setTimeout(() => { stopSymptomVoiceRecording(); }, 3000);
+        } else {
+            if (vText) vText.innerText = "Speech recognition not supported in this browser. Audio will be saved.";
+            silenceTimer = setTimeout(() => stopSymptomVoiceRecording(), 5000);
+        }
+
+        mediaRecorder.start();
+    }).catch(err => {
+        alert("Microphone access denied or error: " + err);
+    });
+}
+
+function stopSymptomVoiceRecording() {
+    clearTimeout(silenceTimer);
+    if (mediaRecorder && mediaRecorder.state === "recording") {
+        mediaRecorder.stop();
+        mediaRecorder.stream.getTracks().forEach(t => t.stop());
+    }
+    if (speechRec) {
+        try { speechRec.stop(); } catch(e){}
+    }
+    let btn = document.getElementById("micBtn");
+    if (btn) {
+        btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-top:-2px;"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>';
+        btn.style.background = "";
+    }
+}
+
+
+async function matchSymptomsFromTranscript(text) {
+    let vStatus = document.getElementById("voiceStatus");
+    if (vStatus) vStatus.innerText = "Processing text with AI / Extractor...";
+    
+    try {
+        let resp = await api("/api/extract_symptoms", {
+            method: "POST",
+            body: JSON.stringify({text: text})
+        });
+        
+        let matched = resp.symptoms || [];
+        
+        let checkboxes = document.querySelectorAll(".symcheck");
+        checkboxes.forEach(cb => {
+            if (matched.includes(cb.value)) {
+                cb.checked = true;
+            }
+        });
+
+        if (vStatus) {
+            vStatus.innerText = matched.length > 0 ? ("Extracted: " + matched.join(", ")) : "No exact symptoms matched from description. Audio saved.";
+        }
+    } catch(e) {
+        console.error("Extraction error", e);
+        if (vStatus) vStatus.innerText = "Error extracting symptoms. Audio saved.";
+    }
+}
+
 </script>
 </body>
 </html>

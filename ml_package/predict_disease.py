@@ -1,21 +1,34 @@
 import pandas as pd
 import joblib
 import os
+import warnings
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_DIR = os.path.join(BASE_DIR, "models")
+
+def _fix_sklearn_compat(model):
+    """Fix sklearn version mismatch for LogisticRegression between 1.7 and 1.8."""
+    # sklearn 1.8 removed 'multi_class' from LogisticRegression, but 1.7's
+    # predict_proba still reads self.multi_class. If unpickling a 1.8 model
+    # into 1.7, the attribute is missing — so we add it back.
+    from sklearn.linear_model import LogisticRegression
+    if isinstance(model, LogisticRegression) and not hasattr(model, 'multi_class'):
+        model.multi_class = 'auto'
+    return model
 
 def predict_health_status(input_data):
     if not os.path.exists(os.path.join(MODEL_DIR,'disease_classifier_model.pkl')):
         return {"error": "Model files not found in models/ directory."}
     
-    disease_model = joblib.load(os.path.join(MODEL_DIR,'disease_classifier_model.pkl'))
-    triage_model = joblib.load(os.path.join(MODEL_DIR,'triage_risk_model.pkl'))
-    escalation_model = joblib.load(os.path.join(MODEL_DIR,'escalation_model.pkl'))
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        disease_model = joblib.load(os.path.join(MODEL_DIR,'disease_classifier_model.pkl'))
+        triage_model = joblib.load(os.path.join(MODEL_DIR,'triage_risk_model.pkl'))
+        escalation_model = _fix_sklearn_compat(joblib.load(os.path.join(MODEL_DIR,'escalation_model.pkl')))
     
-    scaler = joblib.load(os.path.join(MODEL_DIR,'feature_scaler.pkl'))
-    triage_le = joblib.load(os.path.join(MODEL_DIR,'triage_label_encoder.pkl'))
-    expected_features = joblib.load(os.path.join(MODEL_DIR,'disease_features.pkl'))
+        scaler = joblib.load(os.path.join(MODEL_DIR,'feature_scaler.pkl'))
+        triage_le = joblib.load(os.path.join(MODEL_DIR,'triage_label_encoder.pkl'))
+        expected_features = joblib.load(os.path.join(MODEL_DIR,'disease_features.pkl'))
 
     df = pd.DataFrame([input_data])
     

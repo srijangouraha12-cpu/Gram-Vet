@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 from pymongo import MongoClient
 import os
 
-import os, json, sqlite3, hashlib, math
+import os, json, sqlite3, hashlib, math, base64, uuid
 from dotenv import load_dotenv
 from pymongo import MongoClient
 
@@ -116,7 +116,7 @@ print("MongoDB Atlas configured" if MONGO_URI else "MongoDB Atlas URI not config
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "gramvet-local-dev-secret")
 
-@app.route('/media/<filename>')
+@app.route('/media/<path:filename>')
 def serve_media(filename):
     media_dir = os.path.join(BASE, 'media')
     return send_from_directory(media_dir, filename)
@@ -980,6 +980,71 @@ def weather_preview(u,c):
     wx["location_source"]=source
     return jsonify(weather=wx)
 
+
+@app.post("/api/extract_symptoms")
+def extract_symptoms():
+    d = request.json or {}
+    text = (d.get("text") or "").strip()
+    if not text:
+        return jsonify(symptoms=[])
+
+    # First try LLM if Gemini key is available
+    api_key = os.getenv("GEMINI_API_KEY")
+    if api_key:
+        try:
+            import requests
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+            prompt = f"Extract the exact symptoms mentioned in the following text. You MUST return ONLY a JSON list of strings exactly matching the official symptom list. If none match, return [].\nText: '{text}'\nOfficial List: {SYMPTOMS}"
+            resp = requests.post(url, json={"contents": [{"parts": [{"text": prompt}]}]}, timeout=10)
+            if resp.ok:
+                resp_json = resp.json()
+                content = resp_json["candidates"][0]["content"]["parts"][0]["text"]
+                
+                # Simple extraction of the JSON array from response
+                import re
+                match = re.search(r"\[.*?\]", content, re.DOTALL)
+                if match:
+                    llm_syms = json.loads(match.group(0))
+                    valid_syms = [s for s in llm_syms if s in SYMPTOMS]
+                    return jsonify(symptoms=valid_syms, method="gemini")
+        except Exception as e:
+            print("LLM Extraction failed, falling back to dict:", e)
+
+    # Fallback to comprehensive dictionary matching
+    synonymMap = {
+        "Fever": ["fever", "bukhar", "taap", "garam", "hot", "बुखार", "ताप", "गरम"],
+        "Cough": ["cough", "khansi", "khokla", "खांसी", "खोकला", "कफ"],
+        "Nasal discharge": ["nasal", "naak", "sardi", "नाक बहना", "नाक गळणे", "सर्दी", "नाक"],
+        "Difficulty breathing": ["breathing", "saans", "shwas", "dhaap", "सांस", "श्वास", "धाप"],
+        "Reduced appetite": ["appetite", "bhook", "kha nahi", "chara", "भूख", "भूक", "चारा", "खा नहीं"],
+        "Weakness / lethargy": ["weakness", "lethargy", "kamzor", "sust", "थकान", "कमजोर", "सुस्ती", "अशक्त", "थकवा"],
+        "Diarrhoea": ["diarrhoea", "diarrhea", "dast", "loose motion", "julab", "दस्त", "जुलाब", "संडास"],
+        "Vomiting": ["vomit", "ulti", "okari", "उल्टी", "उलटी", "ओकारी"],
+        "Dehydration": ["dehydration", "pani", "tahan", "पानी", "तहान", "डिहाइड्रेशन"],
+        "Excessive salivation": ["saliva", "drool", "lar", "laar", "thook", "लार", "लाळ", "थूक"],
+        "Mouth lesions / sores": ["mouth", "chhale", "tond", "muh", "छाले", "मुंह", "तोंड", "जख्म"],
+        "Lameness / difficulty walking": ["lame", "limp", "langda", "chalne", "लंगड़ा", "लंगड", "चाल"],
+        "Swelling": ["swelling", "sujan", "suj", "सूजन", "सूज", "फुगीर"],
+        "Skin lesions / rash": ["rash", "chakatte", "pural", "khaj", "चकत्ते", "पुरळ", "दाने", "खाज"],
+        "Eye discharge / redness": ["eye", "aankh", "dole", "lal", "आंख", "डोळे", "लाल"],
+        "Abnormal milk production": ["milk", "doodh", "dudh", "दूध", "दूध कमी", "दूध नहीं"],
+        "Abortion / reproductive problem": ["abortion", "garbhpat", "pillu", "गर्भपात", "प्रजनन", "पिल्लू"],
+        "Weight loss": ["weight", "vazan", "wazan", "barik", "वजन", "बारीक", "दुबला"],
+        "High body temperature": ["high temperature", "tez bukhar", "kadak taap", "तेज बुखार", "कडक ताप"],
+        "Ticks / external parasites": ["tick", "killi", "gochid", "parjivi", "किल्ली", "गोचिड", "परजीवी", "जूं", "कीड़े"]
+    }
+    
+    text_lower = text.lower()
+    matched = []
+    for sym in SYMPTOMS:
+        kws = synonymMap.get(sym, [sym.lower()])
+        for kw in kws:
+            if kw in text_lower:
+                matched.append(sym)
+                break
+    
+    return jsonify(symptoms=matched, method="dictionary")
+
 @app.post("/api/cases/report")
 @require_role("farmer")
 def report_case(u,c):
@@ -1129,24 +1194,40 @@ def report_case(u,c):
                                 f"{u['name']} reported {a['name']} ({a['species']}) in {u['village'] or 'your assigned village'}. Preliminary model: {disease}{probtxt}. Review the case.",
                                 "HIGH" if (isinstance(prob,(int,float)) and prob>=0.7) else "INFO",
                                 "CASE",case_id,a["village_id"])
+    audio_url = None
+    if d.get("audio_base64"):
+        try:
+            audio_data = base64.b64decode(d["audio_base64"].split(",")[1] if "," in d["audio_base64"] else d["audio_base64"])
+            filename = f"audio_{uuid.uuid4().hex[:8]}.webm"
+            audio_dir = os.path.join(BASE, "media", "audio")
+            os.makedirs(audio_dir, exist_ok=True)
+            filepath = os.path.join(audio_dir, filename)
+            with open(filepath, "wb") as f:
+                f.write(audio_data)
+            audio_url = f"/media/audio/{filename}"
+        except Exception as e:
+            print("Error saving audio:", e)
+            
     reported_at=now()
     c.execute("""
-      INSERT INTO health_reports(case_id,animal_id,symptoms_json,notes,reported_at,ai_prediction_json,ai_model_version,weather_json,report_inputs_json)
-      VALUES(?,?,?,?,?,?,?,?,?)
-    """,(case_id,a["id"],json.dumps(symptoms),d.get("notes"),reported_at,json.dumps(prediction),prediction.get("model_version","unknown"),json.dumps(weather),json.dumps(report_inputs)))
+      INSERT INTO health_reports(case_id,animal_id,symptoms_json,notes,reported_at,ai_prediction_json,ai_model_version,weather_json,report_inputs_json,audio_url)
+      VALUES(?,?,?,?,?,?,?,?,?,?)
+    """,(case_id,a["id"],json.dumps(symptoms),d.get("notes"),reported_at,json.dumps(prediction),prediction.get("model_version","unknown"),json.dumps(weather),json.dumps(report_inputs),audio_url))
     report_id=c.execute("SELECT last_insert_rowid()").fetchone()[0]
     c.commit()
     mongo_upsert("cases", {"_id": case_id, "id": case_id, "animal_id": a["id"], "farmer_id": u["id"], "vet_id": vet["id"] if vet else None, "status": "OPEN", "synced_at": now()})
     mongo_upsert("health_reports", {
         "_id": report_id, "id": report_id, "case_id": case_id, "animal_id": a["id"],
         "symptoms": symptoms, "symptoms_json": json.dumps(symptoms), "notes": d.get("notes"),
+        "audio_url": audio_url,
+        "audio_data": d.get("audio_base64"),
         "reported_at": reported_at, "prediction": prediction, "ai_prediction_json": json.dumps(prediction),
         "ai_model_version": prediction.get("model_version","unknown"), "weather": weather,
         "weather_json": json.dumps(weather), "report_inputs": report_inputs,
         "report_inputs_json": json.dumps(report_inputs), "synced_at": now()
     })
     return jsonify(ok=True,case_id=case_id,prediction=prediction,weather=weather,
-                   symptoms=symptoms,report_inputs=report_inputs,
+                   symptoms=symptoms,report_inputs=report_inputs, audio_url=audio_url,
                    assigned_vet={"id":vet["id"],"name":vet["name"],"phone":vet["phone"],"address":vet["address"]} if vet else None)
 
 @app.get("/api/animals/<int:animal_id>/history")
